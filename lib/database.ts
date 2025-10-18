@@ -356,6 +356,7 @@ let solutionsData: Solution[] = [
       '減少品質問題 80%',
       '24/7 不間斷生產'
     ],
+    imageUrl: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&h=600&fit=crop&crop=center',
     isActive: true,
     order: 1,
     createdAt: '2024-01-15',
@@ -371,6 +372,7 @@ let solutionsData: Solution[] = [
       '多種缺陷類型識別',
       '即時品質報告'
     ],
+    imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop&crop=center',
     isActive: true,
     order: 2,
     createdAt: '2024-01-15',
@@ -386,6 +388,7 @@ let solutionsData: Solution[] = [
       '庫存即時監控',
       '減少人為錯誤'
     ],
+    imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop&crop=center',
     isActive: true,
     order: 3,
     createdAt: '2024-01-15',
