@@ -4,35 +4,35 @@ import { Users, Target, Award, Lightbulb } from 'lucide-react'
 
 const stats = [
   { number: '100+', label: '成功案例', icon: Award },
-  { number: '50+', label: '合作夥伴', icon: Users },
+  { number: '4+', label: '產業領域', icon: Users },
   { number: '99.9%', label: '系統穩定性', icon: Target },
-  { number: '24/7', label: '技術支援', icon: Lightbulb }
+  { number: '15+', label: '年實務經驗', icon: Lightbulb }
 ]
 
 const team = [
   {
-    name: '張工程師',
-    position: '技術總監',
-    expertise: 'AOI 視覺檢測、機器學習',
-    experience: '15 年經驗'
+    name: '技術總監',
+    position: '自動化整合專家',
+    expertise: '半導體設備整合、AOI 視覺檢測',
+    experience: '15 年現場實務經驗'
   },
   {
-    name: '李經理',
-    position: '專案經理',
-    expertise: '系統整合、專案管理',
-    experience: '12 年經驗'
+    name: '專案經理',
+    position: '系統整合專家',
+    expertise: '面板產業自動化、專案管理',
+    experience: '12 年產業經驗'
   },
   {
-    name: '王博士',
-    position: 'AI 研發主管',
-    expertise: '深度學習、數據分析',
-    experience: '10 年經驗'
+    name: 'AI 研發主管',
+    position: '智能檢測專家',
+    expertise: 'AI 視覺檢測、智慧控制',
+    experience: '10 年研發經驗'
   },
   {
-    name: '陳工程師',
-    position: '軟體開發主管',
-    expertise: '系統開發、API 設計',
-    experience: '8 年經驗'
+    name: '軟體開發主管',
+    position: '系統開發專家',
+    expertise: '製造執行系統、數據分析',
+    experience: '8 年開發經驗'
   }
 ]
 
@@ -49,7 +49,7 @@ export default function AboutPage() {
               <span className="gradient-text">關於我們</span>
             </h1>
             <p className="text-xl text-gray-300 leading-relaxed">
-              專業的自動化整合公司，致力於為企業提供最優質的智能化解決方案
+              向陽自動化 - 專業的自動化整合公司，致力於為企業提供最優質的智能化解決方案
             </p>
           </div>
         </div>
@@ -65,20 +65,18 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-gray-300 leading-relaxed">
                 <p>
-                  Sunrider Automation 成立於 2015 年，是一家專注於自動化整合技術的創新公司。
-                  我們致力於將最新的 AI、機器視覺、機器人技術與傳統製造業相結合，
-                  為客戶提供完整的智能化解決方案。
+                  由具多年自動化整合與現場實務經驗的專業團隊所組成，
+                  向陽自動化致力於為客戶量身打造高效、穩定的自動化解決方案。
+                  我們深知每個製程環節都有其獨特挑戰，
+                  因此從需求分析、系統設計到現場導入，
+                  皆以精準思維與嚴謹態度協助客戶優化生產流程，
+                  提升整體產能效率與作業安全性。
                 </p>
                 <p>
-                  經過多年的發展，我們已經成功服務了超過 100 家企業客戶，
-                  涵蓋電子製造、汽車工業、食品加工等多個行業。
-                  我們的團隊由經驗豐富的工程師和技術專家組成，
-                  擁有深厚的技術底蘊和豐富的實戰經驗。
-                </p>
-                <p>
-                  我們相信，技術的價值在於解決實際問題。
-                  因此，我們始終以客戶需求為導向，
-                  提供客製化的解決方案，幫助企業提升效率、降低成本、增強競爭力。
+                  向陽的服務足跡橫跨半導體、面板、電子產業、傳統製造等多元產業，
+                  並持續拓展 AI 視覺檢測與智慧控制等新興應用領域。
+                  我們不侷限於既有框架，而是以技術為核心、以實務為導向，
+                  積極探索自動化在未來製造中的更多可能性。
                 </p>
               </div>
             </div>
@@ -106,10 +104,10 @@ export default function AboutPage() {
         <div className="container-custom">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="gradient-text">我們的成就</span>
+              <span className="gradient-text">我們的實力</span>
             </h2>
             <p className="text-xl text-gray-300">
-              用數據說話，展現我們的專業實力
+              橫跨多元產業的豐富經驗，展現我們的專業實力
             </p>
           </div>
           
@@ -141,9 +139,9 @@ export default function AboutPage() {
               </div>
               <h3 className="text-2xl font-bold text-white mb-4">我們的使命</h3>
               <p className="text-gray-300 leading-relaxed">
-                通過創新的自動化技術，幫助企業實現智能化轉型，
-                提升生產效率，降低運營成本，創造更大的商業價值。
-                我們致力於成為客戶最信賴的技術合作夥伴。
+                以精準思維與嚴謹態度，為客戶量身打造高效、穩定的自動化解決方案。
+                從需求分析到現場導入，我們致力於優化每個製程環節，
+                提升整體產能效率與作業安全性，成為客戶最信賴的技術合作夥伴。
               </p>
             </div>
             
@@ -153,9 +151,9 @@ export default function AboutPage() {
               </div>
               <h3 className="text-2xl font-bold text-white mb-4">我們的願景</h3>
               <p className="text-gray-300 leading-relaxed">
-                成為亞洲領先的自動化整合解決方案提供商，
-                推動製造業的智能化升級，讓每一家企業都能享受到
-                先進技術帶來的便利和效益。
+                以技術為核心、以實務為導向，積極探索自動化在未來製造中的更多可能性。
+                我們不侷限於既有框架，持續拓展 AI 視覺檢測與智慧控制等新興應用領域，
+                推動製造業的智能化升級。
               </p>
             </div>
           </div>
@@ -170,7 +168,7 @@ export default function AboutPage() {
               <span className="gradient-text">專業團隊</span>
             </h2>
             <p className="text-xl text-gray-300">
-              經驗豐富的技術專家，為您提供最優質的服務
+              具多年自動化整合與現場實務經驗的專業團隊
             </p>
           </div>
           
@@ -209,9 +207,9 @@ export default function AboutPage() {
               <div className="w-16 h-16 bg-primary-600/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Award className="w-8 h-8 text-primary-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">專業品質</h3>
+              <h3 className="text-xl font-bold text-white mb-3">精準思維</h3>
               <p className="text-gray-300">
-                追求卓越的技術品質，確保每一個解決方案都能達到最高標準
+                以嚴謹態度分析每個製程環節，確保解決方案的精準度與可靠性
               </p>
             </div>
             
@@ -219,9 +217,9 @@ export default function AboutPage() {
               <div className="w-16 h-16 bg-primary-600/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-primary-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">客戶至上</h3>
+              <h3 className="text-xl font-bold text-white mb-3">實務導向</h3>
               <p className="text-gray-300">
-                以客戶需求為中心，提供客製化的解決方案和優質的服務體驗
+                基於多年現場實務經驗，提供符合實際需求的客製化解決方案
               </p>
             </div>
             
@@ -229,9 +227,9 @@ export default function AboutPage() {
               <div className="w-16 h-16 bg-primary-600/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Lightbulb className="w-8 h-8 text-primary-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">持續創新</h3>
+              <h3 className="text-xl font-bold text-white mb-3">技術創新</h3>
               <p className="text-gray-300">
-                不斷探索新技術，推動行業發展，為客戶創造更大的價值
+                持續探索 AI 視覺檢測與智慧控制等新興技術，推動製造業智能化升級
               </p>
             </div>
           </div>
