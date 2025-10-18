@@ -132,6 +132,7 @@ export default function Home() {
       console.log('Solutions data with images:', result.data?.map((s: any) => ({ id: s.id, title: s.title, imageUrl: s.imageUrl })))
       
       if (result.success && isMounted) {
+        console.log('Setting solutions state:', result.data)
         setSolutions(result.data || [])
       }
     } catch (error) {

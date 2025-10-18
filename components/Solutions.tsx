@@ -57,6 +57,8 @@ const defaultSolutions = [
 ]
 
 export default function Solutions({ solutions = [] }: SolutionsProps) {
+  console.log('Solutions component received:', solutions)
+  console.log('Solutions with images:', solutions.filter(s => s.imageUrl))
   return (
     <section className="section-padding bg-dark-900">
       <div className="container-custom">
