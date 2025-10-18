@@ -63,6 +63,31 @@ export interface TeamMember {
   updatedAt: string
 }
 
+export interface Service {
+  id: string
+  title: string
+  description: string
+  features: string[]
+  icon: string
+  href: string
+  isActive: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Solution {
+  id: string
+  title: string
+  description: string
+  benefits: string[]
+  imageUrl?: string
+  isActive: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
 // 模擬數據存儲
 let contentData: ContentItem[] = [
   {
@@ -269,6 +294,105 @@ let teamMembersData: TeamMember[] = [
   }
 ]
 
+let servicesData: Service[] = [
+  {
+    id: 'service-1',
+    title: 'AOI 視覺檢測',
+    description: '高精度自動光學檢測系統，提供快速、準確的產品品質檢測解決方案',
+    features: ['高解析度影像處理', 'AI 智能缺陷識別', '即時檢測報告', '客製化檢測流程'],
+    icon: 'Eye',
+    href: '/products/aoi',
+    isActive: true,
+    order: 1,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20'
+  },
+  {
+    id: 'service-2',
+    title: 'AI 智能分析',
+    description: '深度學習與機器學習技術，為您的數據提供智能分析與預測',
+    features: ['深度學習模型', '預測性維護', '數據挖掘分析', '智能決策支援'],
+    icon: 'Brain',
+    href: '/products/ai',
+    isActive: true,
+    order: 2,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20'
+  },
+  {
+    id: 'service-3',
+    title: '機器手臂整合',
+    description: '工業機器人系統整合，實現自動化生產與精準操作',
+    features: ['多軸協調控制', '視覺引導系統', '安全防護機制', '遠程監控管理'],
+    icon: 'Bot',
+    href: '/products/robotics',
+    isActive: true,
+    order: 3,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20'
+  },
+  {
+    id: 'service-4',
+    title: '軟體開發',
+    description: '客製化軟體解決方案，整合各項自動化設備與系統',
+    features: ['系統整合開發', '人機介面設計', '數據庫管理', '雲端服務部署'],
+    icon: 'Code',
+    href: '/products/software',
+    isActive: true,
+    order: 4,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20'
+  }
+]
+
+let solutionsData: Solution[] = [
+  {
+    id: 'solution-1',
+    title: '製造業自動化',
+    description: '完整的生產線自動化解決方案，提升效率與品質',
+    benefits: [
+      '提升生產效率 40%',
+      '降低人工成本 60%',
+      '減少品質問題 80%',
+      '24/7 不間斷生產'
+    ],
+    isActive: true,
+    order: 1,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20'
+  },
+  {
+    id: 'solution-2',
+    title: '品質檢測系統',
+    description: 'AI 驅動的視覺檢測系統，確保產品品質一致性',
+    benefits: [
+      '99.9% 檢測準確率',
+      '毫秒級檢測速度',
+      '多種缺陷類型識別',
+      '即時品質報告'
+    ],
+    isActive: true,
+    order: 2,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20'
+  },
+  {
+    id: 'solution-3',
+    title: '智能倉儲管理',
+    description: '機器人與 AI 結合的智能倉儲解決方案',
+    benefits: [
+      '自動化貨物分揀',
+      '智能路徑規劃',
+      '庫存即時監控',
+      '減少人為錯誤'
+    ],
+    isActive: true,
+    order: 3,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20'
+  }
+]
+
 // API 函數
 export const getContent = (type?: string, section?: string): ContentItem[] => {
   let filtered = contentData
@@ -379,5 +503,73 @@ export const deleteTeamMember = (id: string): boolean => {
   const index = teamMembersData.findIndex(member => member.id === id)
   if (index === -1) return false
   teamMembersData.splice(index, 1)
+  return true
+}
+
+export const getServices = (): Service[] => {
+  return servicesData.filter(service => service.isActive).sort((a, b) => a.order - b.order)
+}
+
+export const updateService = (id: string, updates: Partial<Service>): Service | null => {
+  const index = servicesData.findIndex(service => service.id === id)
+  if (index === -1) return null
+  
+  servicesData[index] = {
+    ...servicesData[index],
+    ...updates,
+    updatedAt: new Date().toISOString()
+  }
+  return servicesData[index]
+}
+
+export const addService = (service: Omit<Service, 'id' | 'createdAt' | 'updatedAt'>): Service => {
+  const newService: Service = {
+    ...service,
+    id: `service-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+  servicesData.push(newService)
+  return newService
+}
+
+export const deleteService = (id: string): boolean => {
+  const index = servicesData.findIndex(service => service.id === id)
+  if (index === -1) return false
+  servicesData.splice(index, 1)
+  return true
+}
+
+export const getSolutions = (): Solution[] => {
+  return solutionsData.filter(solution => solution.isActive).sort((a, b) => a.order - b.order)
+}
+
+export const updateSolution = (id: string, updates: Partial<Solution>): Solution | null => {
+  const index = solutionsData.findIndex(solution => solution.id === id)
+  if (index === -1) return null
+  
+  solutionsData[index] = {
+    ...solutionsData[index],
+    ...updates,
+    updatedAt: new Date().toISOString()
+  }
+  return solutionsData[index]
+}
+
+export const addSolution = (solution: Omit<Solution, 'id' | 'createdAt' | 'updatedAt'>): Solution => {
+  const newSolution: Solution = {
+    ...solution,
+    id: `solution-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+  solutionsData.push(newSolution)
+  return newSolution
+}
+
+export const deleteSolution = (id: string): boolean => {
+  const index = solutionsData.findIndex(solution => solution.id === id)
+  if (index === -1) return false
+  solutionsData.splice(index, 1)
   return true
 }
