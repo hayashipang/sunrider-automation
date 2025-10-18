@@ -29,14 +29,19 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 })
     }
     
+    console.log('Updating contact info:', { id, updates }) // 調試日誌
+    
     const updatedInfo = updateContactInfo(id, updates)
     
     if (!updatedInfo) {
       return NextResponse.json({ success: false, error: 'Contact info not found' }, { status: 404 })
     }
     
+    console.log('Updated contact info:', updatedInfo) // 調試日誌
+    
     return NextResponse.json({ success: true, data: updatedInfo })
   } catch (error) {
+    console.error('Error updating contact info:', error)
     return NextResponse.json({ success: false, error: 'Failed to update contact info' }, { status: 500 })
   }
 }

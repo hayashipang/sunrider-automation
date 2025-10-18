@@ -113,6 +113,8 @@ export default function ContactManagement() {
     
     setIsLoading(true)
     try {
+      console.log('Saving contact info:', editingItem) // 調試日誌
+      
       const response = await fetch('/api/contact-info', {
         method: 'PUT',
         headers: {
@@ -122,6 +124,8 @@ export default function ContactManagement() {
       })
       
       const result = await response.json()
+      console.log('API response:', result) // 調試日誌
+      
       if (result.success) {
         setContactInfo(contactInfo.map(item => 
           item.id === editingItem.id ? editingItem : item
@@ -134,6 +138,7 @@ export default function ContactManagement() {
         alert('更新失敗：' + result.error)
       }
     } catch (error) {
+      console.error('Error saving contact info:', error)
       alert('更新失敗，請稍後再試')
     } finally {
       setIsLoading(false)
@@ -346,7 +351,10 @@ export default function ContactManagement() {
                   <input
                     type="text"
                     value={editingItem.description || ''}
-                    onChange={(e) => setEditingItem({...editingItem, description: e.target.value})}
+                    onChange={(e) => {
+                      console.log('Description changed:', e.target.value) // 調試日誌
+                      setEditingItem({...editingItem, description: e.target.value})
+                    }}
                     className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
                   />
                 </div>

@@ -247,10 +247,16 @@ export const updateContactInfo = (id: string, updates: Partial<ContactInfo>): Co
   const index = contactInfoData.findIndex(info => info.id === id)
   if (index === -1) return null
   
+  console.log('Before update:', contactInfoData[index]) // 調試日誌
+  console.log('Updates to apply:', updates) // 調試日誌
+  
   contactInfoData[index] = {
     ...contactInfoData[index],
     ...updates,
     updatedAt: new Date().toISOString()
   }
+  
+  console.log('After update:', contactInfoData[index]) // 調試日誌
+  
   return contactInfoData[index]
 }
