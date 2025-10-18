@@ -4,9 +4,8 @@ const nextConfig = {
     domains: ['localhost', 'vercel.app'],
     unoptimized: true
   },
-  experimental: {
-    appDir: true,
-  },
+  // App Router is enabled by default in Next.js 14
+  // No need for experimental.appDir
 }
 
 module.exports = nextConfig
