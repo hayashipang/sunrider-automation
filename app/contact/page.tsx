@@ -1,9 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react'
+
+interface ContentItem {
+  id: string
+  type: string
+  section: string
+  title?: string
+  subtitle?: string
+  description?: string
+  content?: string
+  order: number
+  isActive: boolean
+  updatedAt: string
+}
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -15,6 +28,44 @@ export default function ContactPage() {
     message: ''
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [content, setContent] = useState<ContentItem[]>([])
+  const [contactInfo, setContactInfo] = useState({
+    email: 'contact@sunrider-automation.com',
+    phone: '+886-2-1234-5678',
+    address: '台北市信義區信義路五段7號',
+    emailDesc: '我們會在 24 小時內回覆',
+    phoneDesc: '週一至週五 9:00-18:00',
+    addressDesc: '歡迎預約參觀'
+  })
+
+  useEffect(() => {
+    fetchContent()
+    fetchContactInfo()
+  }, [])
+
+  const fetchContent = async () => {
+    try {
+      const response = await fetch('/api/content?type=contact')
+      const result = await response.json()
+      if (result.success) {
+        setContent(result.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch content:', error)
+    }
+  }
+
+  const fetchContactInfo = async () => {
+    try {
+      const response = await fetch('/api/contact-info')
+      const result = await response.json()
+      if (result.success) {
+        setContactInfo(result.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch contact info:', error)
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,10 +91,14 @@ export default function ContactPage() {
         <div className="container-custom">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="gradient-text">聯絡我們</span>
+              <span className="gradient-text">
+                {content.find(item => item.section === 'hero-title')?.title || '聯絡我們'}
+              </span>
             </h1>
             <p className="text-xl text-gray-300 leading-relaxed">
-              準備開始您的自動化之旅？我們的專業團隊將為您提供客製化的解決方案
+              {content.find(item => item.section === 'hero-title')?.subtitle || 
+               content.find(item => item.section === 'description')?.content ||
+               '準備開始您的自動化之旅？我們的專業團隊將為您提供客製化的解決方案'}
             </p>
           </div>
         </div>
@@ -181,12 +236,12 @@ export default function ContactPage() {
 
             {/* Contact Information */}
             <div className="space-y-8">
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-6">聯絡資訊</h2>
-                <p className="text-gray-300 leading-relaxed mb-8">
-                  我們期待與您合作，為您的企業提供最優質的自動化解決方案。
-                  請隨時與我們聯絡，我們將在 24 小時內回覆您的訊息。
-                </p>
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-6">聯絡資訊</h2>
+              <p className="text-gray-300 leading-relaxed mb-8">
+                {content.find(item => item.section === 'description')?.content ||
+                 '我們期待與您合作，為您的企業提供最優質的自動化解決方案。請隨時與我們聯絡，我們將在 24 小時內回覆您的訊息。'}
+              </p>
               </div>
 
               <div className="space-y-6">
@@ -196,8 +251,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-1">電子郵件</h3>
-                    <p className="text-gray-300">contact@sunrider-automation.com</p>
-                    <p className="text-gray-400 text-sm">我們會在 24 小時內回覆</p>
+                    <p className="text-gray-300">{contactInfo.email}</p>
+                    <p className="text-gray-400 text-sm">{contactInfo.emailDesc}</p>
                   </div>
                 </div>
 
@@ -207,8 +262,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-1">電話</h3>
-                    <p className="text-gray-300">+886-2-1234-5678</p>
-                    <p className="text-gray-400 text-sm">週一至週五 9:00-18:00</p>
+                    <p className="text-gray-300">{contactInfo.phone}</p>
+                    <p className="text-gray-400 text-sm">{contactInfo.phoneDesc}</p>
                   </div>
                 </div>
 
@@ -218,8 +273,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-1">地址</h3>
-                    <p className="text-gray-300">台北市信義區信義路五段7號</p>
-                    <p className="text-gray-400 text-sm">歡迎預約參觀</p>
+                    <p className="text-gray-300">{contactInfo.address}</p>
+                    <p className="text-gray-400 text-sm">{contactInfo.addressDesc}</p>
                   </div>
                 </div>
               </div>

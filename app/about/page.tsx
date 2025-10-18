@@ -1,6 +1,22 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { Users, Target, Award, Lightbulb } from 'lucide-react'
+
+interface ContentItem {
+  id: string
+  type: string
+  section: string
+  title?: string
+  subtitle?: string
+  description?: string
+  content?: string
+  order: number
+  isActive: boolean
+  updatedAt: string
+}
 
 const stats = [
   { number: '100+', label: '成功案例', icon: Award },
@@ -37,6 +53,24 @@ const team = [
 ]
 
 export default function AboutPage() {
+  const [content, setContent] = useState<ContentItem[]>([])
+
+  useEffect(() => {
+    fetchContent()
+  }, [])
+
+  const fetchContent = async () => {
+    try {
+      const response = await fetch('/api/content?type=about')
+      const result = await response.json()
+      if (result.success) {
+        setContent(result.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch content:', error)
+    }
+  }
+
   return (
     <main className="min-h-screen">
       <Navbar />
@@ -64,20 +98,27 @@ export default function AboutPage() {
                 <span className="gradient-text">我們的故事</span>
               </h2>
               <div className="space-y-4 text-gray-300 leading-relaxed">
-                <p>
-                  由具多年自動化整合與現場實務經驗的專業團隊所組成，
-                  向陽自動化致力於為客戶量身打造高效、穩定的自動化解決方案。
-                  我們深知每個製程環節都有其獨特挑戰，
-                  因此從需求分析、系統設計到現場導入，
-                  皆以精準思維與嚴謹態度協助客戶優化生產流程，
-                  提升整體產能效率與作業安全性。
-                </p>
-                <p>
-                  向陽的服務足跡橫跨半導體、面板、電子產業、傳統製造等多元產業，
-                  並持續拓展 AI 視覺檢測與智慧控制等新興應用領域。
-                  我們不侷限於既有框架，而是以技術為核心、以實務為導向，
-                  積極探索自動化在未來製造中的更多可能性。
-                </p>
+                {content.filter(item => item.section === 'company-story' || item.section === 'company-story-2').map((item, index) => (
+                  <p key={item.id} dangerouslySetInnerHTML={{ __html: item.content || '' }} />
+                ))}
+                {content.length === 0 && (
+                  <>
+                    <p>
+                      由具多年自動化整合與現場實務經驗的專業團隊所組成，
+                      向陽自動化致力於為客戶量身打造高效、穩定的自動化解決方案。
+                      我們深知每個製程環節都有其獨特挑戰，
+                      因此從需求分析、系統設計到現場導入，
+                      皆以精準思維與嚴謹態度協助客戶優化生產流程，
+                      提升整體產能效率與作業安全性。
+                    </p>
+                    <p>
+                      向陽的服務足跡橫跨半導體、面板、電子產業、傳統製造等多元產業，
+                      並持續拓展 AI 視覺檢測與智慧控制等新興應用領域。
+                      我們不侷限於既有框架，而是以技術為核心、以實務為導向，
+                      積極探索自動化在未來製造中的更多可能性。
+                    </p>
+                  </>
+                )}
               </div>
             </div>
             
@@ -137,24 +178,26 @@ export default function AboutPage() {
               <div className="w-12 h-12 bg-primary-600/20 rounded-lg flex items-center justify-center mb-6">
                 <Target className="w-6 h-6 text-primary-400" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">我們的使命</h3>
-              <p className="text-gray-300 leading-relaxed">
-                以精準思維與嚴謹態度，為客戶量身打造高效、穩定的自動化解決方案。
-                從需求分析到現場導入，我們致力於優化每個製程環節，
-                提升整體產能效率與作業安全性，成為客戶最信賴的技術合作夥伴。
-              </p>
+              <h3 className="text-2xl font-bold text-white mb-4">
+                {content.find(item => item.section === 'mission')?.title || '我們的使命'}
+              </h3>
+              <p className="text-gray-300 leading-relaxed" dangerouslySetInnerHTML={{
+                __html: content.find(item => item.section === 'mission')?.content || 
+                '以精準思維與嚴謹態度，為客戶量身打造高效、穩定的自動化解決方案。從需求分析到現場導入，我們致力於優化每個製程環節，提升整體產能效率與作業安全性，成為客戶最信賴的技術合作夥伴。'
+              }} />
             </div>
             
             <div className="card">
               <div className="w-12 h-12 bg-primary-600/20 rounded-lg flex items-center justify-center mb-6">
                 <Lightbulb className="w-6 h-6 text-primary-400" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">我們的願景</h3>
-              <p className="text-gray-300 leading-relaxed">
-                以技術為核心、以實務為導向，積極探索自動化在未來製造中的更多可能性。
-                我們不侷限於既有框架，持續拓展 AI 視覺檢測與智慧控制等新興應用領域，
-                推動製造業的智能化升級。
-              </p>
+              <h3 className="text-2xl font-bold text-white mb-4">
+                {content.find(item => item.section === 'vision')?.title || '我們的願景'}
+              </h3>
+              <p className="text-gray-300 leading-relaxed" dangerouslySetInnerHTML={{
+                __html: content.find(item => item.section === 'vision')?.content || 
+                '以技術為核心、以實務為導向，積極探索自動化在未來製造中的更多可能性。我們不侷限於既有框架，持續拓展 AI 視覺檢測與智慧控制等新興應用領域，推動製造業的智能化升級。'
+              }} />
             </div>
           </div>
         </div>
