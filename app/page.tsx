@@ -60,9 +60,7 @@ export default function Home() {
     
     // 定期刷新數據（每30秒）
     const interval = setInterval(() => {
-      if (isMounted) {
-        fetchSolutions()
-      }
+      fetchSolutions()
     }, 30000)
     
     return () => {
@@ -86,7 +84,7 @@ export default function Home() {
       const result = await response.json()
       console.log('Content API result:', result)
       
-      if (result.success && isMounted) {
+      if (result.success) {
         setContent(result.data || [])
       }
     } catch (error) {
@@ -112,7 +110,7 @@ export default function Home() {
       const result = await response.json()
       console.log('Services API result:', result)
       
-      if (result.success && isMounted) {
+      if (result.success) {
         setServices(result.data || [])
       }
     } catch (error) {
@@ -142,12 +140,12 @@ export default function Home() {
       console.log('result.success:', result.success)
       console.log('result.data length:', result.data?.length)
       
-      if (result.success && isMounted) {
+      if (result.success) {
         console.log('Setting solutions state:', result.data)
         setSolutions(result.data || [])
         console.log('Solutions state set successfully')
       } else {
-        console.log('Not setting solutions state - success:', result.success, 'isMounted:', isMounted)
+        console.log('Not setting solutions state - success:', result.success)
       }
     } catch (error) {
       console.error('Failed to fetch solutions:', error)
