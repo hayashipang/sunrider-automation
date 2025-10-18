@@ -36,8 +36,10 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: false, error: 'No file provided' }, { status: 400 })
       }
       
-      // 模擬文件上傳 - 在實際應用中，這裡應該上傳到雲存儲
-      const imageUrl = `/uploads/${Date.now()}-${file.name}`
+      // 將圖片轉換為 Base64 數據 URL，這樣可以在瀏覽器中直接顯示
+      const arrayBuffer = await file.arrayBuffer()
+      const base64 = Buffer.from(arrayBuffer).toString('base64')
+      const imageUrl = `data:${file.type};base64,${base64}`
       
       const imageData = {
         name: file.name,
