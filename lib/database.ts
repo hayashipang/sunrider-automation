@@ -50,6 +50,19 @@ export interface ContactInfo {
   updatedAt: string
 }
 
+export interface TeamMember {
+  id: string
+  name: string
+  position: string
+  expertise: string
+  experience: string
+  imageUrl?: string
+  isActive: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
 // 模擬數據存儲
 let contentData: ContentItem[] = [
   {
@@ -182,6 +195,53 @@ let contactInfoData: ContactInfo[] = [
   }
 ]
 
+let teamMembersData: TeamMember[] = [
+  {
+    id: 'team-1',
+    name: '技術總監',
+    position: '自動化整合專家',
+    expertise: '半導體設備整合、AOI 視覺檢測',
+    experience: '15 年現場實務經驗',
+    isActive: true,
+    order: 1,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20'
+  },
+  {
+    id: 'team-2',
+    name: '專案經理',
+    position: '系統整合專家',
+    expertise: '面板產業自動化、專案管理',
+    experience: '12 年產業經驗',
+    isActive: true,
+    order: 2,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20'
+  },
+  {
+    id: 'team-3',
+    name: 'AI 研發主管',
+    position: '智能檢測專家',
+    expertise: 'AI 視覺檢測、智慧控制',
+    experience: '10 年研發經驗',
+    isActive: true,
+    order: 3,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20'
+  },
+  {
+    id: 'team-4',
+    name: '軟體開發主管',
+    position: '系統開發專家',
+    expertise: '製造執行系統、數據分析',
+    experience: '8 年開發經驗',
+    isActive: true,
+    order: 4,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-20'
+  }
+]
+
 // API 函數
 export const getContent = (type?: string, section?: string): ContentItem[] => {
   let filtered = contentData
@@ -259,4 +319,38 @@ export const updateContactInfo = (id: string, updates: Partial<ContactInfo>): Co
   console.log('After update:', contactInfoData[index]) // 調試日誌
   
   return contactInfoData[index]
+}
+
+export const getTeamMembers = (): TeamMember[] => {
+  return teamMembersData.filter(member => member.isActive).sort((a, b) => a.order - b.order)
+}
+
+export const updateTeamMember = (id: string, updates: Partial<TeamMember>): TeamMember | null => {
+  const index = teamMembersData.findIndex(member => member.id === id)
+  if (index === -1) return null
+  
+  teamMembersData[index] = {
+    ...teamMembersData[index],
+    ...updates,
+    updatedAt: new Date().toISOString()
+  }
+  return teamMembersData[index]
+}
+
+export const addTeamMember = (member: Omit<TeamMember, 'id' | 'createdAt' | 'updatedAt'>): TeamMember => {
+  const newMember: TeamMember = {
+    ...member,
+    id: `team-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+  teamMembersData.push(newMember)
+  return newMember
+}
+
+export const deleteTeamMember = (id: string): boolean => {
+  const index = teamMembersData.findIndex(member => member.id === id)
+  if (index === -1) return false
+  teamMembersData.splice(index, 1)
+  return true
 }

@@ -54,9 +54,11 @@ const team = [
 
 export default function AboutPage() {
   const [content, setContent] = useState<ContentItem[]>([])
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
 
   useEffect(() => {
     fetchContent()
+    fetchTeamMembers()
   }, [])
 
   const fetchContent = async () => {
@@ -68,6 +70,18 @@ export default function AboutPage() {
       }
     } catch (error) {
       console.error('Failed to fetch content:', error)
+    }
+  }
+
+  const fetchTeamMembers = async () => {
+    try {
+      const response = await fetch('/api/team')
+      const result = await response.json()
+      if (result.success) {
+        setTeamMembers(result.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch team members:', error)
     }
   }
 
@@ -216,7 +230,19 @@ export default function AboutPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
+            {teamMembers.length > 0 ? teamMembers.map((member, index) => (
+              <div key={member.id} className="card text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-white font-bold text-xl">
+                    {member.name.charAt(0)}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-1">{member.name}</h3>
+                <p className="text-primary-400 font-medium mb-2">{member.position}</p>
+                <p className="text-gray-300 text-sm mb-2">{member.expertise}</p>
+                <p className="text-gray-400 text-xs">{member.experience}</p>
+              </div>
+            )) : team.map((member, index) => (
               <div key={index} className="card text-center">
                 <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white font-bold text-xl">

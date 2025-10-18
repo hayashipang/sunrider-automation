@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Save, Eye, Edit3, Users, Target, Lightbulb } from 'lucide-react'
+import { ArrowLeft, Save, Eye, Edit3, Users, Target, Lightbulb, Plus, Trash2 } from 'lucide-react'
 import RichTextEditor from '@/components/RichTextEditor'
 
 interface ContentItem {
@@ -19,6 +19,19 @@ interface ContentItem {
   updatedAt: string
 }
 
+interface TeamMember {
+  id: string
+  name: string
+  position: string
+  expertise: string
+  experience: string
+  imageUrl?: string
+  isActive: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
 const sectionIcons = {
   'company-story': Users,
   'company-story-2': Users,
@@ -31,7 +44,10 @@ const sectionIcons = {
 export default function AboutManagement() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [content, setContent] = useState<ContentItem[]>([])
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
   const [editingItem, setEditingItem] = useState<ContentItem | null>(null)
+  const [editingMember, setEditingMember] = useState<TeamMember | null>(null)
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
@@ -42,6 +58,7 @@ export default function AboutManagement() {
     } else {
       setIsAuthenticated(true)
       fetchContent()
+      fetchTeamMembers()
     }
   }, [router])
 
@@ -54,6 +71,18 @@ export default function AboutManagement() {
       }
     } catch (error) {
       console.error('Failed to fetch content:', error)
+    }
+  }
+
+  const fetchTeamMembers = async () => {
+    try {
+      const response = await fetch('/api/team')
+      const result = await response.json()
+      if (result.success) {
+        setTeamMembers(result.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch team members:', error)
     }
   }
 
@@ -84,6 +113,56 @@ export default function AboutManagement() {
       alert('更新失敗，請稍後再試')
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleSaveMember = async () => {
+    if (!editingMember) return
+    
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/team', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editingMember),
+      })
+      
+      const result = await response.json()
+      if (result.success) {
+        setTeamMembers(teamMembers.map(member => 
+          member.id === editingMember.id ? editingMember : member
+        ))
+        setEditingMember(null)
+        alert('團隊成員已更新！')
+        fetchTeamMembers()
+      } else {
+        alert('更新失敗：' + result.error)
+      }
+    } catch (error) {
+      alert('更新失敗，請稍後再試')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleDeleteMember = async (id: string) => {
+    if (!confirm('確定要刪除這個團隊成員嗎？')) return
+    
+    try {
+      const response = await fetch(`/api/team?id=${id}`, {
+        method: 'DELETE',
+      })
+      
+      if (response.ok) {
+        setTeamMembers(teamMembers.filter(member => member.id !== id))
+        alert('團隊成員已刪除')
+      } else {
+        alert('刪除失敗')
+      }
+    } catch (error) {
+      alert('刪除失敗，請稍後再試')
     }
   }
 
@@ -128,7 +207,7 @@ export default function AboutManagement() {
       </header>
 
       <div className="p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Content List */}
           <div className="card">
             <h2 className="text-xl font-bold text-white mb-6">關於我們內容</h2>
@@ -171,6 +250,56 @@ export default function AboutManagement() {
                   </div>
                 )
               })}
+            </div>
+          </div>
+
+          {/* Team Management */}
+          <div className="card">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-white">專業團隊</h2>
+              <button
+                onClick={() => setShowAddMemberModal(true)}
+                className="btn-primary flex items-center space-x-2"
+              >
+                <Plus className="w-4 h-4" />
+                <span>新增成員</span>
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {teamMembers.map((member) => (
+                <div key={member.id} className="border border-dark-600 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-medium text-white">{member.name}</h3>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      member.isActive ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'
+                    }`}>
+                      {member.isActive ? '啟用' : '停用'}
+                    </span>
+                  </div>
+                  
+                  <p className="text-gray-300 text-sm mb-1">{member.position}</p>
+                  <p className="text-gray-400 text-xs mb-2">{member.expertise}</p>
+                  <p className="text-gray-500 text-xs">{member.experience}</p>
+                  
+                  <div className="flex items-center space-x-2 mt-3">
+                    <button
+                      onClick={() => setEditingMember(member)}
+                      className="flex items-center space-x-1 text-primary-400 hover:text-primary-300 transition-colors text-sm"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                      <span>編輯</span>
+                    </button>
+                    <button
+                      onClick={() => handleDeleteMember(member.id)}
+                      className="flex items-center space-x-1 text-red-400 hover:text-red-300 transition-colors text-sm"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      <span>刪除</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -262,14 +391,161 @@ export default function AboutManagement() {
                   </button>
                 </div>
               </div>
+            ) : editingMember ? (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    姓名
+                  </label>
+                  <input
+                    type="text"
+                    value={editingMember.name}
+                    onChange={(e) => setEditingMember({...editingMember, name: e.target.value})}
+                    className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    職位
+                  </label>
+                  <input
+                    type="text"
+                    value={editingMember.position}
+                    onChange={(e) => setEditingMember({...editingMember, position: e.target.value})}
+                    className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    專業領域
+                  </label>
+                  <input
+                    type="text"
+                    value={editingMember.expertise}
+                    onChange={(e) => setEditingMember({...editingMember, expertise: e.target.value})}
+                    className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    經驗
+                  </label>
+                  <input
+                    type="text"
+                    value={editingMember.experience}
+                    onChange={(e) => setEditingMember({...editingMember, experience: e.target.value})}
+                    className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                  />
+                </div>
+                
+                <div className="flex items-center space-x-4">
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={editingMember.isActive}
+                      onChange={(e) => setEditingMember({...editingMember, isActive: e.target.checked})}
+                      className="w-4 h-4 text-primary-600 bg-dark-700 border-dark-600 rounded focus:ring-primary-500"
+                    />
+                    <span className="text-gray-300">啟用此成員</span>
+                  </label>
+                </div>
+                
+                <div className="flex space-x-4 pt-4">
+                  <button
+                    onClick={handleSaveMember}
+                    disabled={isLoading}
+                    className="btn-primary flex items-center space-x-2 disabled:opacity-50"
+                  >
+                    <Save className="w-4 h-4" />
+                    <span>{isLoading ? '儲存中...' : '儲存變更'}</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => setEditingMember(null)}
+                    className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
+                  >
+                    取消
+                  </button>
+                </div>
+              </div>
             ) : (
               <div className="text-center py-8">
                 <Edit3 className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                <p className="text-gray-400">選擇左側的內容項目開始編輯</p>
+                <p className="text-gray-400">選擇左側的內容項目或團隊成員開始編輯</p>
               </div>
             )}
           </div>
         </div>
+
+        {/* Add Member Modal */}
+        {showAddMemberModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-dark-800 rounded-xl p-6 w-full max-w-md mx-4">
+              <h3 className="text-xl font-bold text-white mb-6">新增團隊成員</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    姓名
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                    placeholder="輸入姓名"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    職位
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                    placeholder="輸入職位"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    專業領域
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                    placeholder="輸入專業領域"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    經驗
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
+                    placeholder="輸入經驗"
+                  />
+                </div>
+                
+                <div className="flex justify-end space-x-4 pt-4">
+                  <button
+                    onClick={() => setShowAddMemberModal(false)}
+                    className="px-6 py-2 text-gray-300 hover:text-white transition-colors"
+                  >
+                    取消
+                  </button>
+                  <button className="btn-primary">
+                    新增成員
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
