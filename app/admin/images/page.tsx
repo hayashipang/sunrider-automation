@@ -20,7 +20,7 @@ const mockImages = [
   {
     id: 1,
     name: 'aoi-system-1.jpg',
-    url: '/images/aoi-system-1.jpg',
+    url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&h=1080&fit=crop&crop=center',
     alt: 'AOI 視覺檢測系統',
     category: 'AOI',
     size: '2.3 MB',
@@ -31,7 +31,7 @@ const mockImages = [
   {
     id: 2,
     name: 'ai-platform-2.jpg',
-    url: '/images/ai-platform-2.jpg',
+    url: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1920&h=1080&fit=crop&crop=center',
     alt: 'AI 智能分析平台',
     category: 'AI',
     size: '1.8 MB',
@@ -42,7 +42,7 @@ const mockImages = [
   {
     id: 3,
     name: 'robotics-arm-3.jpg',
-    url: '/images/robotics-arm-3.jpg',
+    url: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&h=1080&fit=crop&crop=center',
     alt: '機器手臂整合方案',
     category: 'Robotics',
     size: '3.1 MB',
@@ -53,7 +53,7 @@ const mockImages = [
   {
     id: 4,
     name: 'software-dev-4.jpg',
-    url: '/images/software-dev-4.jpg',
+    url: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1920&h=1080&fit=crop&crop=center',
     alt: '軟體開發服務',
     category: 'Software',
     size: '2.7 MB',

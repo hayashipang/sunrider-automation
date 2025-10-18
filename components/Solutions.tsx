@@ -30,7 +30,7 @@ const defaultSolutions = [
       '減少品質問題 80%',
       '24/7 不間斷生產'
     ],
-    image: '/images/manufacturing.jpg'
+    image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&h=600&fit=crop&crop=center'
   },
   {
     title: '品質檢測系統',
@@ -41,7 +41,7 @@ const defaultSolutions = [
       '多種缺陷類型識別',
       '即時品質報告'
     ],
-    image: '/images/quality-inspection.jpg'
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop&crop=center'
   },
   {
     title: '智能倉儲管理',
@@ -52,7 +52,7 @@ const defaultSolutions = [
       '庫存即時監控',
       '減少人為錯誤'
     ],
-    image: '/images/warehouse.jpg'
+    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=600&fit=crop&crop=center'
   }
 ]
 
