@@ -12,7 +12,9 @@ import {
   Plus,
   Edit,
   Trash2,
-  Eye
+  Eye,
+  FileText,
+  Upload
 } from 'lucide-react'
 
 // 模擬數據
@@ -92,15 +94,21 @@ export default function AdminDashboard() {
                 </a>
               </li>
               <li>
+                <a href="/admin/content" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-dark-700 rounded-lg transition-colors">
+                  <FileText className="w-5 h-5" />
+                  <span>內容管理</span>
+                </a>
+              </li>
+              <li>
                 <a href="/admin/products" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-dark-700 rounded-lg transition-colors">
                   <Package className="w-5 h-5" />
                   <span>產品管理</span>
                 </a>
               </li>
               <li>
-                <a href="/admin/images" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-dark-700 rounded-lg transition-colors">
-                  <Image className="w-5 h-5" />
-                  <span>圖片管理</span>
+                <a href="/admin/media" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-dark-700 rounded-lg transition-colors">
+                  <Upload className="w-5 h-5" />
+                  <span>媒體管理</span>
                 </a>
               </li>
               <li>

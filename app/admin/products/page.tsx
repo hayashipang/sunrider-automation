@@ -13,53 +13,24 @@ import {
   ArrowLeft
 } from 'lucide-react'
 
-// 模擬產品數據
-const mockProducts = [
-  {
-    id: 1,
-    name: 'AOI 視覺檢測系統',
-    category: 'AOI',
-    description: '高精度自動光學檢測系統，提供快速、準確的產品品質檢測解決方案',
-    status: 'active',
-    views: 156,
-    createdAt: '2024-01-15',
-    updatedAt: '2024-01-20'
-  },
-  {
-    id: 2,
-    name: 'AI 智能分析平台',
-    category: 'AI',
-    description: '深度學習與機器學習技術，為您的數據提供智能分析與預測',
-    status: 'active',
-    views: 234,
-    createdAt: '2024-01-10',
-    updatedAt: '2024-01-18'
-  },
-  {
-    id: 3,
-    name: '機器手臂整合方案',
-    category: 'Robotics',
-    description: '工業機器人系統整合，實現自動化生產與精準操作',
-    status: 'draft',
-    views: 89,
-    createdAt: '2024-01-12',
-    updatedAt: '2024-01-19'
-  },
-  {
-    id: 4,
-    name: '軟體開發服務',
-    category: 'Software',
-    description: '客製化軟體解決方案，整合各項自動化設備與系統',
-    status: 'active',
-    views: 178,
-    createdAt: '2024-01-08',
-    updatedAt: '2024-01-17'
-  }
-]
+interface Product {
+  id: string
+  name: string
+  category: 'AOI' | 'AI' | 'Robotics' | 'Software'
+  description: string
+  features: string[]
+  benefits: string[]
+  applications: string[]
+  imageUrl?: string
+  status: 'active' | 'draft'
+  views: number
+  createdAt: string
+  updatedAt: string
+}
 
 export default function AdminProducts() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [products, setProducts] = useState(mockProducts)
+  const [products, setProducts] = useState<Product[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState('all')
   const [showAddModal, setShowAddModal] = useState(false)
@@ -71,12 +42,31 @@ export default function AdminProducts() {
       router.push('/admin/login')
     } else {
       setIsAuthenticated(true)
+      fetchProducts()
     }
   }, [router])
 
-  const handleDelete = (id: number) => {
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('/api/products')
+      const result = await response.json()
+      if (result.success) {
+        setProducts(result.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch products:', error)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
     if (confirm('確定要刪除這個產品嗎？')) {
-      setProducts(products.filter(product => product.id !== id))
+      try {
+        // 這裡可以添加刪除 API 調用
+        setProducts(products.filter(product => product.id !== id))
+        alert('產品已刪除')
+      } catch (error) {
+        alert('刪除失敗，請稍後再試')
+      }
     }
   }
 
