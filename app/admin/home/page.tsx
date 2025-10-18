@@ -239,15 +239,38 @@ export default function HomeManagement() {
       
       const result = await response.json()
       if (result.success) {
-        setEditingSolution({
+        const updatedSolution = {
           ...editingSolution,
           imageUrl: result.data.url
+        }
+        
+        // 更新編輯中的解決方案
+        setEditingSolution(updatedSolution)
+        
+        // 立即保存到數據庫
+        const saveResponse = await fetch('/api/solutions', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedSolution),
         })
-        alert('圖片上傳成功！')
+        
+        const saveResult = await saveResponse.json()
+        if (saveResult.success) {
+          // 更新本地狀態
+          setSolutions(solutions.map(solution => 
+            solution.id === editingSolution.id ? updatedSolution : solution
+          ))
+          alert('圖片上傳並保存成功！')
+        } else {
+          alert('圖片上傳成功，但保存失敗：' + saveResult.error)
+        }
       } else {
         alert('圖片上傳失敗：' + result.error)
       }
     } catch (error) {
+      console.error('Image upload error:', error)
       alert('圖片上傳失敗，請稍後再試')
     } finally {
       setUploadingImage(false)
@@ -615,7 +638,15 @@ export default function HomeManagement() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Solutions List */}
             <div className="card">
-              <h2 className="text-xl font-bold text-white mb-6">解決方案管理</h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-white">解決方案管理</h2>
+                <button
+                  onClick={fetchSolutions}
+                  className="px-3 py-1 text-sm bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
+                >
+                  刷新數據
+                </button>
+              </div>
               
               <div className="space-y-4">
                 {solutions.map((solution) => (

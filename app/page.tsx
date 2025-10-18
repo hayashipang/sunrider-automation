@@ -129,6 +129,7 @@ export default function Home() {
       
       const result = await response.json()
       console.log('Solutions API result:', result)
+      console.log('Solutions data with images:', result.data?.map((s: any) => ({ id: s.id, title: s.title, imageUrl: s.imageUrl })))
       
       if (result.success && isMounted) {
         setSolutions(result.data || [])
