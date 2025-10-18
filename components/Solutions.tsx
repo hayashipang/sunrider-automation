@@ -120,10 +120,10 @@ export default function Solutions({ solutions = [] }: SolutionsProps) {
               {/* Image */}
               <div className={`${index % 2 === 1 ? 'lg:col-start-1' : ''}`}>
                 <div className="relative">
-                  {solution.imageUrl ? (
+                  {(solutions.length > 0 ? (solution as Solution).imageUrl : (solution as any).image) ? (
                     <div className="aspect-video rounded-xl border border-dark-600 overflow-hidden">
                       <img
-                        src={solution.imageUrl}
+                        src={solutions.length > 0 ? (solution as Solution).imageUrl : (solution as any).image}
                         alt={solution.title}
                         className="w-full h-full object-cover"
                       />
