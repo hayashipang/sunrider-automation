@@ -65,24 +65,32 @@ export default function AboutManagement() {
   const fetchContent = async () => {
     try {
       const response = await fetch('/api/content?type=about')
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
       const result = await response.json()
       if (result.success) {
-        setContent(result.data)
+        setContent(result.data || [])
       }
     } catch (error) {
       console.error('Failed to fetch content:', error)
+      setContent([])
     }
   }
 
   const fetchTeamMembers = async () => {
     try {
       const response = await fetch('/api/team')
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
       const result = await response.json()
       if (result.success) {
-        setTeamMembers(result.data)
+        setTeamMembers(result.data || [])
       }
     } catch (error) {
       console.error('Failed to fetch team members:', error)
+      setTeamMembers([])
     }
   }
 

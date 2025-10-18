@@ -18,6 +18,19 @@ interface ContentItem {
   updatedAt: string
 }
 
+interface TeamMember {
+  id: string
+  name: string
+  position: string
+  expertise: string
+  experience: string
+  imageUrl?: string
+  isActive: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
 const stats = [
   { number: '100+', label: '成功案例', icon: Award },
   { number: '4+', label: '產業領域', icon: Users },
@@ -55,33 +68,51 @@ const team = [
 export default function AboutPage() {
   const [content, setContent] = useState<ContentItem[]>([])
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    setIsMounted(true)
     fetchContent()
     fetchTeamMembers()
+    
+    return () => {
+      setIsMounted(false)
+    }
   }, [])
 
   const fetchContent = async () => {
     try {
       const response = await fetch('/api/content?type=about')
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
       const result = await response.json()
-      if (result.success) {
-        setContent(result.data)
+      if (result.success && isMounted) {
+        setContent(result.data || [])
       }
     } catch (error) {
       console.error('Failed to fetch content:', error)
+      if (isMounted) {
+        setContent([])
+      }
     }
   }
 
   const fetchTeamMembers = async () => {
     try {
       const response = await fetch('/api/team')
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
       const result = await response.json()
-      if (result.success) {
-        setTeamMembers(result.data)
+      if (result.success && isMounted) {
+        setTeamMembers(result.data || [])
       }
     } catch (error) {
       console.error('Failed to fetch team members:', error)
+      if (isMounted) {
+        setTeamMembers([])
+      }
     }
   }
 
@@ -234,13 +265,13 @@ export default function AboutPage() {
               <div key={member.id} className="card text-center">
                 <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-white font-bold text-xl">
-                    {member.name.charAt(0)}
+                    {member.name && member.name.length > 0 ? member.name.charAt(0).toUpperCase() : '?'}
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-1">{member.name}</h3>
-                <p className="text-primary-400 font-medium mb-2">{member.position}</p>
-                <p className="text-gray-300 text-sm mb-2">{member.expertise}</p>
-                <p className="text-gray-400 text-xs">{member.experience}</p>
+                <h3 className="text-lg font-bold text-white mb-1">{member.name || '未命名'}</h3>
+                <p className="text-primary-400 font-medium mb-2">{member.position || '職位未設定'}</p>
+                <p className="text-gray-300 text-sm mb-2">{member.expertise || '專業領域未設定'}</p>
+                <p className="text-gray-400 text-xs">{member.experience || '經驗未設定'}</p>
               </div>
             )) : team.map((member, index) => (
               <div key={index} className="card text-center">
