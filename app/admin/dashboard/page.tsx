@@ -14,7 +14,9 @@ import {
   Trash2,
   Eye,
   FileText,
-  Upload
+  Upload,
+  Info,
+  Phone
 } from 'lucide-react'
 
 // 模擬數據
@@ -109,6 +111,18 @@ export default function AdminDashboard() {
                 <a href="/admin/media" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-dark-700 rounded-lg transition-colors">
                   <Upload className="w-5 h-5" />
                   <span>媒體管理</span>
+                </a>
+              </li>
+              <li>
+                <a href="/admin/about" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-dark-700 rounded-lg transition-colors">
+                  <Info className="w-5 h-5" />
+                  <span>關於我們</span>
+                </a>
+              </li>
+              <li>
+                <a href="/admin/contact" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-dark-700 rounded-lg transition-colors">
+                  <Phone className="w-5 h-5" />
+                  <span>聯絡我們</span>
                 </a>
               </li>
               <li>

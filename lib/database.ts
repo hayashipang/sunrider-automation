@@ -61,6 +61,66 @@ let contentData: ContentItem[] = [
     order: 2,
     isActive: true,
     updatedAt: new Date().toISOString()
+  },
+  // 關於我們內容
+  {
+    id: 'about-1',
+    type: 'about',
+    section: 'company-story',
+    title: '我們的故事',
+    content: '由具多年自動化整合與現場實務經驗的專業團隊所組成，向陽自動化致力於為客戶量身打造高效、穩定的自動化解決方案。我們深知每個製程環節都有其獨特挑戰，因此從需求分析、系統設計到現場導入，皆以精準思維與嚴謹態度協助客戶優化生產流程，提升整體產能效率與作業安全性。',
+    order: 1,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'about-2',
+    type: 'about',
+    section: 'company-story-2',
+    content: '向陽的服務足跡橫跨半導體、面板、電子產業、傳統製造等多元產業，並持續拓展 AI 視覺檢測與智慧控制等新興應用領域。我們不侷限於既有框架，而是以技術為核心、以實務為導向，積極探索自動化在未來製造中的更多可能性。',
+    order: 2,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'about-3',
+    type: 'about',
+    section: 'mission',
+    title: '我們的使命',
+    content: '以精準思維與嚴謹態度，為客戶量身打造高效、穩定的自動化解決方案。從需求分析到現場導入，我們致力於優化每個製程環節，提升整體產能效率與作業安全性，成為客戶最信賴的技術合作夥伴。',
+    order: 3,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'about-4',
+    type: 'about',
+    section: 'vision',
+    title: '我們的願景',
+    content: '以技術為核心、以實務為導向，積極探索自動化在未來製造中的更多可能性。我們不侷限於既有框架，持續拓展 AI 視覺檢測與智慧控制等新興應用領域，推動製造業的智能化升級。',
+    order: 4,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  // 聯絡我們內容
+  {
+    id: 'contact-1',
+    type: 'contact',
+    section: 'hero-title',
+    title: '聯絡我們',
+    subtitle: '向陽自動化 - 專業的自動化整合公司，致力於為企業提供最優質的智能化解決方案',
+    order: 1,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'contact-2',
+    type: 'contact',
+    section: 'description',
+    content: '我們期待與您合作，為您的企業提供最優質的自動化解決方案。請隨時與我們聯絡，我們將在 24 小時內回覆您的訊息。',
+    order: 2,
+    isActive: true,
+    updatedAt: new Date().toISOString()
   }
 ]
 
