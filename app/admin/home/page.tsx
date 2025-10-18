@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Save, Eye, Edit3, Home, Zap, Target, Users, Plus, Trash2, Settings, Lightbulb } from 'lucide-react'
+import { ArrowLeft, Save, Eye, Edit3, Home, Zap, Target, Users, Plus, Trash2, Settings, Lightbulb, Upload, Image as ImageIcon } from 'lucide-react'
 import RichTextEditor from '@/components/RichTextEditor'
 
 interface ContentItem {
@@ -66,6 +66,7 @@ export default function HomeManagement() {
   const [editingSolution, setEditingSolution] = useState<Solution | null>(null)
   const [activeTab, setActiveTab] = useState<'content' | 'services' | 'solutions'>('content')
   const [isLoading, setIsLoading] = useState(false)
+  const [uploadingImage, setUploadingImage] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -218,6 +219,38 @@ export default function HomeManagement() {
       alert('更新失敗，請稍後再試')
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleImageUpload = async (file: File) => {
+    if (!editingSolution) return
+    
+    setUploadingImage(true)
+    try {
+      const formData = new FormData()
+      formData.append('image', file)
+      formData.append('category', 'solutions')
+      formData.append('usedIn', editingSolution.id)
+      
+      const response = await fetch('/api/images', {
+        method: 'POST',
+        body: formData,
+      })
+      
+      const result = await response.json()
+      if (result.success) {
+        setEditingSolution({
+          ...editingSolution,
+          imageUrl: result.data.url
+        })
+        alert('圖片上傳成功！')
+      } else {
+        alert('圖片上傳失敗：' + result.error)
+      }
+    } catch (error) {
+      alert('圖片上傳失敗，請稍後再試')
+    } finally {
+      setUploadingImage(false)
     }
   }
 
@@ -591,27 +624,47 @@ export default function HomeManagement() {
                     className="border border-dark-600 rounded-lg p-4 hover:border-dark-500 transition-colors cursor-pointer"
                     onClick={() => setEditingSolution(solution)}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-medium text-white">{solution.title}</h3>
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        solution.isActive ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'
-                      }`}>
-                        {solution.isActive ? '啟用' : '停用'}
-                      </span>
-                    </div>
-                    
-                    <p className="text-gray-300 text-sm mb-2">{solution.description}</p>
-                    <div className="flex flex-wrap gap-1">
-                      {solution.benefits.slice(0, 2).map((benefit, index) => (
-                        <span key={index} className="px-2 py-1 bg-dark-700 text-gray-400 text-xs rounded">
-                          {benefit}
-                        </span>
-                      ))}
-                      {solution.benefits.length > 2 && (
-                        <span className="px-2 py-1 bg-dark-700 text-gray-400 text-xs rounded">
-                          +{solution.benefits.length - 2} 更多
-                        </span>
-                      )}
+                    <div className="flex items-start space-x-4">
+                      {/* 圖片預覽 */}
+                      <div className="flex-shrink-0">
+                        {solution.imageUrl ? (
+                          <img
+                            src={solution.imageUrl}
+                            alt={solution.title}
+                            className="w-16 h-16 object-cover rounded-lg border border-dark-600"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 bg-dark-700 border border-dark-600 rounded-lg flex items-center justify-center">
+                            <ImageIcon className="w-6 h-6 text-gray-500" />
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* 內容 */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="font-medium text-white truncate">{solution.title}</h3>
+                          <span className={`px-2 py-1 rounded-full text-xs flex-shrink-0 ${
+                            solution.isActive ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'
+                          }`}>
+                            {solution.isActive ? '啟用' : '停用'}
+                          </span>
+                        </div>
+                        
+                        <p className="text-gray-300 text-sm mb-2 line-clamp-2">{solution.description}</p>
+                        <div className="flex flex-wrap gap-1">
+                          {solution.benefits.slice(0, 2).map((benefit, index) => (
+                            <span key={index} className="px-2 py-1 bg-dark-700 text-gray-400 text-xs rounded">
+                              {benefit}
+                            </span>
+                          ))}
+                          {solution.benefits.length > 2 && (
+                            <span className="px-2 py-1 bg-dark-700 text-gray-400 text-xs rounded">
+                              +{solution.benefits.length - 2} 更多
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -658,6 +711,69 @@ export default function HomeManagement() {
                       rows={4}
                       className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
                     />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      解決方案圖片
+                    </label>
+                    
+                    {/* 圖片預覽 */}
+                    {editingSolution.imageUrl && (
+                      <div className="mb-4">
+                        <img
+                          src={editingSolution.imageUrl}
+                          alt={editingSolution.title}
+                          className="w-full h-48 object-cover rounded-lg border border-dark-600"
+                        />
+                      </div>
+                    )}
+                    
+                    {/* 圖片上傳 */}
+                    <div className="border-2 border-dashed border-dark-600 rounded-lg p-6 text-center hover:border-primary-500 transition-colors">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0]
+                          if (file) {
+                            handleImageUpload(file)
+                          }
+                        }}
+                        className="hidden"
+                        id="solution-image-upload"
+                        disabled={uploadingImage}
+                      />
+                      <label
+                        htmlFor="solution-image-upload"
+                        className="cursor-pointer flex flex-col items-center space-y-2"
+                      >
+                        {uploadingImage ? (
+                          <>
+                            <div className="w-8 h-8 border-2 border-primary-400 border-t-transparent rounded-full animate-spin" />
+                            <span className="text-gray-300">上傳中...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-8 h-8 text-gray-400" />
+                            <span className="text-gray-300">
+                              {editingSolution.imageUrl ? '更換圖片' : '上傳圖片'}
+                            </span>
+                            <span className="text-gray-500 text-sm">支援 JPG, PNG, GIF 格式</span>
+                          </>
+                        )}
+                      </label>
+                    </div>
+                    
+                    {/* 移除圖片按鈕 */}
+                    {editingSolution.imageUrl && (
+                      <button
+                        onClick={() => setEditingSolution({...editingSolution, imageUrl: undefined})}
+                        className="mt-2 px-3 py-1 text-red-400 hover:text-red-300 text-sm transition-colors"
+                      >
+                        移除圖片
+                      </button>
+                    )}
                   </div>
                   
                   <div className="flex items-center space-x-4">

@@ -115,17 +115,27 @@ export default function Solutions({ solutions = [] }: SolutionsProps) {
                 </Link>
               </div>
 
-              {/* Image Placeholder */}
+              {/* Image */}
               <div className={`${index % 2 === 1 ? 'lg:col-start-1' : ''}`}>
                 <div className="relative">
-                  <div className="aspect-video bg-gradient-to-br from-dark-700 to-dark-800 rounded-xl border border-dark-600 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-primary-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <div className="w-8 h-8 bg-primary-400 rounded-full" />
-                      </div>
-                      <p className="text-gray-400">解決方案示意圖</p>
+                  {solution.imageUrl ? (
+                    <div className="aspect-video rounded-xl border border-dark-600 overflow-hidden">
+                      <img
+                        src={solution.imageUrl}
+                        alt={solution.title}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                  </div>
+                  ) : (
+                    <div className="aspect-video bg-gradient-to-br from-dark-700 to-dark-800 rounded-xl border border-dark-600 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="w-16 h-16 bg-primary-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <div className="w-8 h-8 bg-primary-400 rounded-full" />
+                        </div>
+                        <p className="text-gray-400">解決方案示意圖</p>
+                      </div>
+                    </div>
+                  )}
                   
                   {/* Decorative elements */}
                   <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary-500/10 rounded-full blur-xl" />
