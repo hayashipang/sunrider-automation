@@ -65,7 +65,8 @@ export default function Home() {
 
   const fetchContent = async () => {
     try {
-      const response = await fetch('/api/content?type=hero')
+      const baseUrl = typeof window !== 'undefined' ? '' : process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+      const response = await fetch(`${baseUrl}/api/content?type=hero`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -83,7 +84,8 @@ export default function Home() {
 
   const fetchServices = async () => {
     try {
-      const response = await fetch('/api/services')
+      const baseUrl = typeof window !== 'undefined' ? '' : process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+      const response = await fetch(`${baseUrl}/api/services`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -101,7 +103,8 @@ export default function Home() {
 
   const fetchSolutions = async () => {
     try {
-      const response = await fetch('/api/solutions')
+      const baseUrl = typeof window !== 'undefined' ? '' : process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+      const response = await fetch(`${baseUrl}/api/solutions`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
