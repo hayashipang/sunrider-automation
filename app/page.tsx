@@ -58,8 +58,16 @@ export default function Home() {
     fetchServices()
     fetchSolutions()
     
+    // 定期刷新數據（每30秒）
+    const interval = setInterval(() => {
+      if (isMounted) {
+        fetchSolutions()
+      }
+    }, 30000)
+    
     return () => {
       setIsMounted(false)
+      clearInterval(interval)
     }
   }, [])
 

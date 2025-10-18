@@ -3,9 +3,13 @@ import { getSolutions, updateSolution, addSolution, deleteSolution } from '@/lib
 
 export async function GET() {
   try {
+    console.log('Solutions API GET called')
     const solutions = getSolutions()
+    console.log('Solutions fetched from database:', solutions.length)
+    console.log('Solutions with images:', solutions.filter(s => s.imageUrl).length)
     return NextResponse.json({ success: true, data: solutions })
   } catch (error) {
+    console.error('Solutions API error:', error)
     return NextResponse.json({ success: false, error: 'Failed to fetch solutions' }, { status: 500 })
   }
 }

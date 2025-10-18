@@ -506,12 +506,20 @@ export const deleteService = (id: string): boolean => {
 }
 
 export const getSolutions = (): Solution[] => {
-  return solutionsData.filter(solution => solution.isActive).sort((a, b) => a.order - b.order)
+  console.log('getSolutions called, solutionsData length:', solutionsData.length)
+  const activeSolutions = solutionsData.filter(solution => solution.isActive).sort((a, b) => a.order - b.order)
+  console.log('Active solutions:', activeSolutions.length)
+  console.log('Solutions with images:', activeSolutions.filter(s => s.imageUrl).length)
+  return activeSolutions
 }
 
 export const updateSolution = (id: string, updates: Partial<Solution>): Solution | null => {
+  console.log('updateSolution called with id:', id, 'updates:', updates)
   const index = solutionsData.findIndex(solution => solution.id === id)
-  if (index === -1) return null
+  if (index === -1) {
+    console.log('Solution not found with id:', id)
+    return null
+  }
   
   solutionsData[index] = {
     ...solutionsData[index],
@@ -519,7 +527,9 @@ export const updateSolution = (id: string, updates: Partial<Solution>): Solution
     updatedAt: new Date().toISOString()
   }
   
-  // 保存到文件系統
+  console.log('Updated solution:', solutionsData[index])
+  
+  // 保存到內存存儲
   saveSolutions(solutionsData)
   
   return solutionsData[index]

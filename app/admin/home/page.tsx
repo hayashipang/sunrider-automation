@@ -257,11 +257,14 @@ export default function HomeManagement() {
         })
         
         const saveResult = await saveResponse.json()
+        console.log('Save result:', saveResult)
         if (saveResult.success) {
           // 更新本地狀態
-          setSolutions(solutions.map(solution => 
+          const newSolutions = solutions.map(solution => 
             solution.id === editingSolution.id ? updatedSolution : solution
-          ))
+          )
+          console.log('Updated solutions:', newSolutions)
+          setSolutions(newSolutions)
           alert('圖片上傳並保存成功！')
         } else {
           alert('圖片上傳成功，但保存失敗：' + saveResult.error)
