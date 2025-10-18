@@ -3,10 +3,17 @@ import { getServices, updateService, addService, deleteService } from '@/lib/dat
 
 export async function GET() {
   try {
+    console.log('Services API called')
     const services = getServices()
+    console.log('Services fetched:', services.length)
     return NextResponse.json({ success: true, data: services })
   } catch (error) {
-    return NextResponse.json({ success: false, error: 'Failed to fetch services' }, { status: 500 })
+    console.error('Services API error:', error)
+    return NextResponse.json({ 
+      success: false, 
+      error: 'Failed to fetch services',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 })
   }
 }
 

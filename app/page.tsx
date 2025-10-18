@@ -65,12 +65,19 @@ export default function Home() {
 
   const fetchContent = async () => {
     try {
-      const baseUrl = typeof window !== 'undefined' ? '' : process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
-      const response = await fetch(`${baseUrl}/api/content?type=hero`)
+      console.log('Fetching content...')
+      const response = await fetch('/api/content?type=hero')
+      console.log('Content response status:', response.status)
+      
       if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Content API error response:', errorText)
         throw new Error(`HTTP error! status: ${response.status}`)
       }
+      
       const result = await response.json()
+      console.log('Content API result:', result)
+      
       if (result.success && isMounted) {
         setContent(result.data || [])
       }
@@ -84,12 +91,19 @@ export default function Home() {
 
   const fetchServices = async () => {
     try {
-      const baseUrl = typeof window !== 'undefined' ? '' : process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
-      const response = await fetch(`${baseUrl}/api/services`)
+      console.log('Fetching services...')
+      const response = await fetch('/api/services')
+      console.log('Services response status:', response.status)
+      
       if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Services API error response:', errorText)
         throw new Error(`HTTP error! status: ${response.status}`)
       }
+      
       const result = await response.json()
+      console.log('Services API result:', result)
+      
       if (result.success && isMounted) {
         setServices(result.data || [])
       }
@@ -103,12 +117,19 @@ export default function Home() {
 
   const fetchSolutions = async () => {
     try {
-      const baseUrl = typeof window !== 'undefined' ? '' : process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
-      const response = await fetch(`${baseUrl}/api/solutions`)
+      console.log('Fetching solutions...')
+      const response = await fetch('/api/solutions')
+      console.log('Solutions response status:', response.status)
+      
       if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Solutions API error response:', errorText)
         throw new Error(`HTTP error! status: ${response.status}`)
       }
+      
       const result = await response.json()
+      console.log('Solutions API result:', result)
+      
       if (result.success && isMounted) {
         setSolutions(result.data || [])
       }
