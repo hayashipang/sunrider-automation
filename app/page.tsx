@@ -130,10 +130,16 @@ export default function Home() {
       const result = await response.json()
       console.log('Solutions API result:', result)
       console.log('Solutions data with images:', result.data?.map((s: any) => ({ id: s.id, title: s.title, imageUrl: s.imageUrl })))
+      console.log('isMounted:', isMounted)
+      console.log('result.success:', result.success)
+      console.log('result.data length:', result.data?.length)
       
       if (result.success && isMounted) {
         console.log('Setting solutions state:', result.data)
         setSolutions(result.data || [])
+        console.log('Solutions state set successfully')
+      } else {
+        console.log('Not setting solutions state - success:', result.success, 'isMounted:', isMounted)
       }
     } catch (error) {
       console.error('Failed to fetch solutions:', error)
