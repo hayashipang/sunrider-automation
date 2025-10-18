@@ -37,35 +37,7 @@ const contactIcons = {
 export default function ContactManagement() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [content, setContent] = useState<ContentItem[]>([])
-  const [contactInfo, setContactInfo] = useState<ContactInfo[]>([
-    {
-      id: 'email-1',
-      type: 'email',
-      label: '電子郵件',
-      value: 'contact@sunrider-automation.com',
-      description: '我們會在 24 小時內回覆',
-      isActive: true,
-      updatedAt: new Date().toISOString()
-    },
-    {
-      id: 'phone-1',
-      type: 'phone',
-      label: '電話',
-      value: '+886-2-1234-5678',
-      description: '週一至週五 9:00-18:00',
-      isActive: true,
-      updatedAt: new Date().toISOString()
-    },
-    {
-      id: 'address-1',
-      type: 'address',
-      label: '地址',
-      value: '台北市信義區信義路五段7號',
-      description: '歡迎預約參觀',
-      isActive: true,
-      updatedAt: new Date().toISOString()
-    }
-  ])
+  const [contactInfo, setContactInfo] = useState<ContactInfo[]>([])
   const [editingItem, setEditingItem] = useState<ContactInfo | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -77,6 +49,7 @@ export default function ContactManagement() {
     } else {
       setIsAuthenticated(true)
       fetchContent()
+      fetchContactInfo()
     }
   }, [router])
 
@@ -92,17 +65,74 @@ export default function ContactManagement() {
     }
   }
 
+  const fetchContactInfo = async () => {
+    try {
+      // 從數據庫獲取聯絡資訊
+      const response = await fetch('/api/contact-info')
+      const result = await response.json()
+      if (result.success) {
+        // 轉換為管理頁面需要的格式
+        const contactData = [
+          {
+            id: 'email-1',
+            type: 'email' as const,
+            label: '電子郵件',
+            value: result.data.email,
+            description: result.data.emailDesc,
+            isActive: true,
+            updatedAt: new Date().toISOString()
+          },
+          {
+            id: 'phone-1',
+            type: 'phone' as const,
+            label: '電話',
+            value: result.data.phone,
+            description: result.data.phoneDesc,
+            isActive: true,
+            updatedAt: new Date().toISOString()
+          },
+          {
+            id: 'address-1',
+            type: 'address' as const,
+            label: '地址',
+            value: result.data.address,
+            description: result.data.addressDesc,
+            isActive: true,
+            updatedAt: new Date().toISOString()
+          }
+        ]
+        setContactInfo(contactData)
+      }
+    } catch (error) {
+      console.error('Failed to fetch contact info:', error)
+    }
+  }
+
   const handleSaveContact = async () => {
     if (!editingItem) return
     
     setIsLoading(true)
     try {
-      // 模擬保存
-      setContactInfo(contactInfo.map(item => 
-        item.id === editingItem.id ? editingItem : item
-      ))
-      setEditingItem(null)
-      alert('聯絡資訊已更新！')
+      const response = await fetch('/api/contact-info', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editingItem),
+      })
+      
+      const result = await response.json()
+      if (result.success) {
+        setContactInfo(contactInfo.map(item => 
+          item.id === editingItem.id ? editingItem : item
+        ))
+        setEditingItem(null)
+        alert('聯絡資訊已更新！')
+        // 重新獲取聯絡資訊以確保同步
+        fetchContactInfo()
+      } else {
+        alert('更新失敗：' + result.error)
+      }
     } catch (error) {
       alert('更新失敗，請稍後再試')
     } finally {

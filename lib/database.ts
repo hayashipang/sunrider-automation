@@ -40,6 +40,16 @@ export interface Image {
   usedIn: string[]
 }
 
+export interface ContactInfo {
+  id: string
+  type: 'email' | 'phone' | 'address' | 'hours'
+  label: string
+  value: string
+  description?: string
+  isActive: boolean
+  updatedAt: string
+}
+
 // 模擬數據存儲
 let contentData: ContentItem[] = [
   {
@@ -142,6 +152,36 @@ let productsData: Product[] = [
 
 let imagesData: Image[] = []
 
+let contactInfoData: ContactInfo[] = [
+  {
+    id: 'email-1',
+    type: 'email',
+    label: '電子郵件',
+    value: 'contact@sunrider-automation.com',
+    description: '我們會在 24 小時內回覆',
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'phone-1',
+    type: 'phone',
+    label: '電話',
+    value: '+886-2-1234-5678',
+    description: '週一至週五 9:00-18:00',
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'address-1',
+    type: 'address',
+    label: '地址',
+    value: '台北市信義區信義路五段7號',
+    description: '歡迎預約參觀',
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  }
+]
+
 // API 函數
 export const getContent = (type?: string, section?: string): ContentItem[] => {
   let filtered = contentData
@@ -197,4 +237,20 @@ export const deleteImage = (id: string): boolean => {
   if (index === -1) return false
   imagesData.splice(index, 1)
   return true
+}
+
+export const getContactInfo = (): ContactInfo[] => {
+  return contactInfoData.filter(info => info.isActive)
+}
+
+export const updateContactInfo = (id: string, updates: Partial<ContactInfo>): ContactInfo | null => {
+  const index = contactInfoData.findIndex(info => info.id === id)
+  if (index === -1) return null
+  
+  contactInfoData[index] = {
+    ...contactInfoData[index],
+    ...updates,
+    updatedAt: new Date().toISOString()
+  }
+  return contactInfoData[index]
 }
