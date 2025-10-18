@@ -21,13 +21,42 @@ interface ContentItem {
   updatedAt: string
 }
 
+interface Service {
+  id: string
+  title: string
+  description: string
+  features: string[]
+  icon: string
+  href: string
+  isActive: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
+interface Solution {
+  id: string
+  title: string
+  description: string
+  benefits: string[]
+  imageUrl?: string
+  isActive: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
 export default function Home() {
   const [content, setContent] = useState<ContentItem[]>([])
+  const [services, setServices] = useState<Service[]>([])
+  const [solutions, setSolutions] = useState<Solution[]>([])
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
     fetchContent()
+    fetchServices()
+    fetchSolutions()
     
     return () => {
       setIsMounted(false)
@@ -52,12 +81,48 @@ export default function Home() {
     }
   }
 
+  const fetchServices = async () => {
+    try {
+      const response = await fetch('/api/services')
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const result = await response.json()
+      if (result.success && isMounted) {
+        setServices(result.data || [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch services:', error)
+      if (isMounted) {
+        setServices([])
+      }
+    }
+  }
+
+  const fetchSolutions = async () => {
+    try {
+      const response = await fetch('/api/solutions')
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const result = await response.json()
+      if (result.success && isMounted) {
+        setSolutions(result.data || [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch solutions:', error)
+      if (isMounted) {
+        setSolutions([])
+      }
+    }
+  }
+
   return (
     <main className="min-h-screen">
       <Navbar />
       <Hero content={content} />
-      <Services />
-      <Solutions />
+      <Services services={services} />
+      <Solutions solutions={solutions} />
       <Footer />
     </main>
   )

@@ -4,7 +4,23 @@ import { motion } from 'framer-motion'
 import { CheckCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
-const solutions = [
+interface Solution {
+  id: string
+  title: string
+  description: string
+  benefits: string[]
+  imageUrl?: string
+  isActive: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
+interface SolutionsProps {
+  solutions?: Solution[]
+}
+
+const defaultSolutions = [
   {
     title: '製造業自動化',
     description: '完整的生產線自動化解決方案，提升效率與品質',
@@ -40,7 +56,7 @@ const solutions = [
   }
 ]
 
-export default function Solutions() {
+export default function Solutions({ solutions = [] }: SolutionsProps) {
   return (
     <section className="section-padding bg-dark-900">
       <div className="container-custom">
@@ -61,9 +77,9 @@ export default function Solutions() {
         </motion.div>
 
         <div className="space-y-16">
-          {solutions.map((solution, index) => (
+          {(solutions.length > 0 ? solutions : defaultSolutions).map((solution, index) => (
             <motion.div
-              key={solution.title}
+              key={solutions.length > 0 ? solution.id : index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}

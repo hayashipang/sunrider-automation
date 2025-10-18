@@ -4,7 +4,31 @@ import { motion } from 'framer-motion'
 import { Eye, Brain, Bot, Code, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
-const services = [
+interface Service {
+  id: string
+  title: string
+  description: string
+  features: string[]
+  icon: string
+  href: string
+  isActive: boolean
+  order: number
+  createdAt: string
+  updatedAt: string
+}
+
+interface ServicesProps {
+  services?: Service[]
+}
+
+const iconMap = {
+  Eye,
+  Brain,
+  Bot,
+  Code
+}
+
+const defaultServices = [
   {
     icon: Eye,
     title: 'AOI 視覺檢測',
@@ -35,7 +59,7 @@ const services = [
   }
 ]
 
-export default function Services() {
+export default function Services({ services = [] }: ServicesProps) {
   return (
     <section className="section-padding bg-dark-800">
       <div className="container-custom">
@@ -56,45 +80,48 @@ export default function Services() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {services.map((service, index) => (
-            <motion.div
-              key={service.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="card group hover:scale-105 transition-transform duration-300"
-            >
-              <div className="flex items-center justify-center w-16 h-16 bg-primary-600/20 rounded-xl mb-6 group-hover:bg-primary-600/30 transition-colors">
-                <service.icon className="w-8 h-8 text-primary-400" />
-              </div>
-              
-              <h3 className="text-xl font-bold mb-4 text-white group-hover:text-primary-400 transition-colors">
-                {service.title}
-              </h3>
-              
-              <p className="text-gray-300 mb-6 leading-relaxed">
-                {service.description}
-              </p>
-              
-              <ul className="space-y-2 mb-6">
-                {service.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center text-sm text-gray-400">
-                    <div className="w-1.5 h-1.5 bg-primary-400 rounded-full mr-3" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              
-              <Link 
-                href={service.href}
-                className="inline-flex items-center text-primary-400 hover:text-primary-300 transition-colors group/link"
+          {(services.length > 0 ? services : defaultServices).map((service, index) => {
+            const IconComponent = services.length > 0 && service.icon ? iconMap[service.icon as keyof typeof iconMap] : service.icon
+            return (
+              <motion.div
+                key={services.length > 0 ? service.id : index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="card group hover:scale-105 transition-transform duration-300"
               >
-                <span>了解更多</span>
-                <ArrowRight className="w-4 h-4 ml-2 group-hover/link:translate-x-1 transition-transform" />
-              </Link>
-            </motion.div>
-          ))}
+                <div className="flex items-center justify-center w-16 h-16 bg-primary-600/20 rounded-xl mb-6 group-hover:bg-primary-600/30 transition-colors">
+                  <IconComponent className="w-8 h-8 text-primary-400" />
+                </div>
+                
+                <h3 className="text-xl font-bold mb-4 text-white group-hover:text-primary-400 transition-colors">
+                  {service.title}
+                </h3>
+                
+                <p className="text-gray-300 mb-6 leading-relaxed">
+                  {service.description}
+                </p>
+                
+                <ul className="space-y-2 mb-6">
+                  {service.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center text-sm text-gray-400">
+                      <div className="w-1.5 h-1.5 bg-primary-400 rounded-full mr-3" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                
+                <Link 
+                  href={service.href}
+                  className="inline-flex items-center text-primary-400 hover:text-primary-300 transition-colors group/link"
+                >
+                  <span>了解更多</span>
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover/link:translate-x-1 transition-transform" />
+                </Link>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>
