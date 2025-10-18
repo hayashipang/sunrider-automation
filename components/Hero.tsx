@@ -4,7 +4,25 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowRight, Play } from 'lucide-react'
 
-export default function Hero() {
+interface ContentItem {
+  id: string
+  type: string
+  section: string
+  title?: string
+  subtitle?: string
+  description?: string
+  content?: string
+  imageUrl?: string
+  order: number
+  isActive: boolean
+  updatedAt: string
+}
+
+interface HeroProps {
+  content?: ContentItem[]
+}
+
+export default function Hero({ content = [] }: HeroProps) {
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Background Gradient */}
@@ -24,9 +42,13 @@ export default function Hero() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="gradient-text">釋放自動化</span>
+              <span className="gradient-text">
+                {content.find(item => item.section === 'hero-title')?.title || '釋放自動化'}
+              </span>
               <br />
-              <span className="text-white">的無限潛能</span>
+              <span className="text-white">
+                {content.find(item => item.section === 'hero-subtitle')?.title || '的無限潛能'}
+              </span>
             </h1>
           </motion.div>
 
@@ -36,9 +58,8 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed"
           >
-            專業的 AOI、AI、機器手臂、軟體整合服務
-            <br />
-            為您的企業提供完整的自動化解決方案
+            {content.find(item => item.section === 'hero-description')?.content || 
+             '專業的 AOI、AI、機器手臂、軟體整合服務\n為您的企業提供完整的自動化解決方案'}
           </motion.p>
 
           <motion.div

@@ -16,7 +16,8 @@ import {
   FileText,
   Upload,
   Info,
-  Phone
+  Phone,
+  Home
 } from 'lucide-react'
 
 // 模擬數據
@@ -93,6 +94,12 @@ export default function AdminDashboard() {
                 <a href="/admin/dashboard" className="flex items-center space-x-3 px-4 py-3 bg-primary-600/20 text-primary-400 rounded-lg">
                   <BarChart3 className="w-5 h-5" />
                   <span>儀表板</span>
+                </a>
+              </li>
+              <li>
+                <a href="/admin/home" className="flex items-center space-x-3 px-4 py-3 text-gray-300 hover:text-white hover:bg-dark-700 rounded-lg transition-colors">
+                  <Home className="w-5 h-5" />
+                  <span>首頁管理</span>
                 </a>
               </li>
               <li>

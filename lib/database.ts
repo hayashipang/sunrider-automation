@@ -85,6 +85,33 @@ let contentData: ContentItem[] = [
     isActive: true,
     updatedAt: new Date().toISOString()
   },
+  {
+    id: 'hero-3',
+    type: 'hero',
+    section: 'hero-title',
+    title: '釋放自動化',
+    order: 3,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'hero-4',
+    type: 'hero',
+    section: 'hero-subtitle',
+    title: '的無限潛能',
+    order: 4,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'hero-5',
+    type: 'hero',
+    section: 'hero-description',
+    content: '專業的 AOI、AI、機器手臂、軟體整合服務\n為您的企業提供完整的自動化解決方案',
+    order: 5,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
   // 關於我們內容
   {
     id: 'about-1',
