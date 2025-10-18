@@ -77,17 +77,19 @@ export default function Solutions({ solutions = [] }: SolutionsProps) {
         </motion.div>
 
         <div className="space-y-16">
-          {(solutions.length > 0 ? solutions : defaultSolutions).map((solution, index) => (
-            <motion.div
-              key={solutions.length > 0 ? solution.id : index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              viewport={{ once: true }}
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
-                index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
-              }`}
-            >
+          {(solutions.length > 0 ? solutions : defaultSolutions).map((solution, index) => {
+            const solutionKey = solutions.length > 0 ? (solution as Solution).id : `default-${index}`
+            return (
+              <motion.div
+                key={solutionKey}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
+                viewport={{ once: true }}
+                className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
+                  index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
+                }`}
+              >
               {/* Content */}
               <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
                 <h3 className="text-3xl font-bold mb-4 gradient-text">
@@ -143,7 +145,8 @@ export default function Solutions({ solutions = [] }: SolutionsProps) {
                 </div>
               </div>
             </motion.div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

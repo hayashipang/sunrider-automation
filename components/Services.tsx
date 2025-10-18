@@ -82,9 +82,10 @@ export default function Services({ services = [] }: ServicesProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {(services.length > 0 ? services : defaultServices).map((service, index) => {
             const IconComponent = services.length > 0 && service.icon ? iconMap[service.icon as keyof typeof iconMap] : service.icon
+            const serviceKey = services.length > 0 ? (service as Service).id : `default-${index}`
             return (
               <motion.div
-                key={services.length > 0 ? service.id : index}
+                key={serviceKey}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
