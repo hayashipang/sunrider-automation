@@ -20,10 +20,14 @@ export default function RichTextEditor({
   const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
-    if (editorRef.current && editorRef.current.innerHTML !== value) {
-      editorRef.current.innerHTML = value
+    if (editorRef.current) {
+      if (value) {
+        editorRef.current.innerHTML = value
+      } else {
+        editorRef.current.innerHTML = `<div class="text-gray-500 pointer-events-none">${placeholder}</div>`
+      }
     }
-  }, [value])
+  }, [value, placeholder])
 
   const handleInput = () => {
     if (editorRef.current) {
@@ -87,14 +91,7 @@ export default function RichTextEditor({
           isFocused ? 'ring-2 ring-primary-500' : ''
         }`}
         style={{ minHeight: '200px' }}
-        dangerouslySetInnerHTML={{ __html: value }}
-      >
-        {!value && (
-          <div className="text-gray-500 pointer-events-none">
-            {placeholder}
-          </div>
-        )}
-      </div>
+      />
     </div>
   )
 }
