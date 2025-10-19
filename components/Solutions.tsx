@@ -70,7 +70,7 @@ export default function Solutions({ solutions = [] }: SolutionsProps) {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            <span className="gradient-text">行業解決方案</span>
+            <span className="gradient-text">行業應用</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             針對不同行業需求，提供客製化的自動化解決方案，
@@ -110,36 +110,44 @@ export default function Solutions({ solutions = [] }: SolutionsProps) {
                   ))}
                 </div>
                 
-                <Link 
-                  href="/solutions"
-                  className="inline-flex items-center text-primary-400 hover:text-primary-300 transition-colors group"
-                >
-                  <span>查看詳細方案</span>
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                       <div className="inline-flex items-center text-primary-400">
+                         <span>專業服務</span>
+                         <ArrowRight className="w-4 h-4 ml-2" />
+                       </div>
               </div>
 
               {/* Image */}
               <div className={`${index % 2 === 1 ? 'lg:col-start-1' : ''}`}>
                 <div className="relative">
-                  {(solutions.length > 0 ? (solution as Solution).imageUrl : (solution as any).image) ? (
-                    <div className="aspect-video rounded-xl border border-dark-600 overflow-hidden">
-                      <img
-                        src={solutions.length > 0 ? (solution as Solution).imageUrl : (solution as any).image}
-                        alt={solution.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div className="aspect-video bg-gradient-to-br from-dark-700 to-dark-800 rounded-xl border border-dark-600 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="w-16 h-16 bg-primary-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                          <div className="w-8 h-8 bg-primary-400 rounded-full" />
-                        </div>
-                        <p className="text-gray-400">解決方案示意圖</p>
+                  {(() => {
+                    const imageUrl = solutions.length > 0 ? (solution as Solution).imageUrl : (solution as any).image
+                    console.log('Image URL for solution:', solution.title, ':', imageUrl)
+                    return imageUrl ? (
+                      <div className="aspect-video rounded-xl border border-dark-600 overflow-hidden">
+                        <img
+                          src={imageUrl}
+                          alt={solution.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            console.error('Image failed to load:', imageUrl)
+                            e.currentTarget.style.display = 'none'
+                          }}
+                          onLoad={() => {
+                            console.log('Image loaded successfully:', imageUrl)
+                          }}
+                        />
                       </div>
-                    </div>
-                  )}
+                    ) : (
+                      <div className="aspect-video bg-gradient-to-br from-dark-700 to-dark-800 rounded-xl border border-dark-600 flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="w-16 h-16 bg-primary-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <div className="w-8 h-8 bg-primary-400 rounded-full" />
+                          </div>
+                          <p className="text-gray-400">解決方案示意圖</p>
+                        </div>
+                      </div>
+                    )
+                  })()}
                   
                   {/* Decorative elements */}
                   <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary-500/10 rounded-full blur-xl" />

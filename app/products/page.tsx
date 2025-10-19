@@ -229,8 +229,8 @@ export default function ProductsPage() {
               <Link href="/contact" className="btn-primary text-lg px-8 py-4">
                 立即諮詢
               </Link>
-              <Link href="/solutions" className="btn-secondary text-lg px-8 py-4">
-                查看解決方案
+              <Link href="/about" className="btn-secondary text-lg px-8 py-4">
+                了解更多
               </Link>
             </div>
           </div>

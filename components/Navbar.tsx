@@ -20,8 +20,6 @@ export default function Navbar() {
         { name: '軟體開發', href: '/products/software' },
       ]
     },
-    { name: '解決方案', href: '/solutions' },
-    { name: '案例分享', href: '/cases' },
     { name: '關於我們', href: '/about' },
     { name: '聯絡我們', href: '/contact' },
   ]

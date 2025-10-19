@@ -68,15 +68,15 @@ export default function Hero({ content = [] }: HeroProps) {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Link href="/contact" className="btn-primary text-lg px-8 py-4 flex items-center space-x-2">
-              <span>開始合作</span>
+            <div className="btn-primary text-lg px-8 py-4 flex items-center space-x-2">
+              <span>專業服務</span>
               <ArrowRight className="w-5 h-5" />
-            </Link>
+            </div>
             
-            <button className="btn-secondary text-lg px-8 py-4 flex items-center space-x-2">
+            <div className="btn-secondary text-lg px-8 py-4 flex items-center space-x-2">
               <Play className="w-5 h-5" />
-              <span>觀看介紹</span>
-            </button>
+              <span>技術優勢</span>
+            </div>
           </motion.div>
 
           {/* Trust Indicators */}

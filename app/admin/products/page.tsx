@@ -12,6 +12,7 @@ import {
   Filter,
   ArrowLeft
 } from 'lucide-react'
+import ProductForm from '@/components/ProductForm'
 
 interface Product {
   id: string
@@ -34,6 +35,8 @@ export default function AdminProducts() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState('all')
   const [showAddModal, setShowAddModal] = useState(false)
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -61,12 +64,55 @@ export default function AdminProducts() {
   const handleDelete = async (id: string) => {
     if (confirm('確定要刪除這個產品嗎？')) {
       try {
-        // 這裡可以添加刪除 API 調用
-        setProducts(products.filter(product => product.id !== id))
-        alert('產品已刪除')
+        const response = await fetch(`/api/products?id=${id}`, {
+          method: 'DELETE'
+        })
+        const result = await response.json()
+        if (result.success) {
+          setProducts(products.filter(product => product.id !== id))
+          alert('產品已刪除')
+        } else {
+          alert('刪除失敗：' + result.error)
+        }
       } catch (error) {
         alert('刪除失敗，請稍後再試')
       }
+    }
+  }
+
+  const handleEdit = (product: Product) => {
+    setEditingProduct(product)
+    setShowAddModal(true)
+  }
+
+  const handleSave = async (productData: Partial<Product>) => {
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/products', {
+        method: editingProduct ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editingProduct ? { id: editingProduct.id, ...productData } : productData),
+      })
+      
+      const result = await response.json()
+      if (result.success) {
+        if (editingProduct) {
+          setProducts(products.map(p => p.id === editingProduct.id ? result.data : p))
+        } else {
+          setProducts([...products, result.data])
+        }
+        setShowAddModal(false)
+        setEditingProduct(null)
+        alert(editingProduct ? '產品已更新！' : '產品已新增！')
+      } else {
+        alert('操作失敗：' + result.error)
+      }
+    } catch (error) {
+      alert('操作失敗，請稍後再試')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -179,6 +225,7 @@ export default function AdminProducts() {
                     <td className="py-3 px-4">
                       <div className="flex items-center space-x-2">
                         <button 
+                          onClick={() => handleEdit(product)}
                           className="text-primary-400 hover:text-primary-300 transition-colors"
                           title="編輯"
                         >
@@ -214,68 +261,17 @@ export default function AdminProducts() {
         </div>
       </div>
 
-      {/* Add Product Modal */}
+      {/* Product Form Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-dark-800 rounded-xl p-6 w-full max-w-2xl mx-4">
-            <h3 className="text-xl font-bold text-white mb-6">新增產品</h3>
-            
-            <form className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">產品名稱</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
-                  placeholder="輸入產品名稱"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">類別</label>
-                <select className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500">
-                  <option value="">選擇類別</option>
-                  <option value="AOI">AOI</option>
-                  <option value="AI">AI</option>
-                  <option value="Robotics">機器手臂</option>
-                  <option value="Software">軟體</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">描述</label>
-                <textarea
-                  rows={4}
-                  className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500"
-                  placeholder="輸入產品描述"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">狀態</label>
-                <select className="w-full px-4 py-2 bg-dark-700 border border-dark-600 rounded-lg text-white focus:outline-none focus:border-primary-500">
-                  <option value="draft">草稿</option>
-                  <option value="active">已發布</option>
-                </select>
-              </div>
-              
-              <div className="flex justify-end space-x-4 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-6 py-2 text-gray-300 hover:text-white transition-colors"
-                >
-                  取消
-                </button>
-                <button
-                  type="submit"
-                  className="btn-primary"
-                >
-                  新增產品
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <ProductForm
+          product={editingProduct}
+          onSave={handleSave}
+          onCancel={() => {
+            setShowAddModal(false)
+            setEditingProduct(null)
+          }}
+          isLoading={isLoading}
+        />
       )}
     </div>
   )

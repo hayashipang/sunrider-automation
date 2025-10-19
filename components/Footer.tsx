@@ -10,16 +10,8 @@ const footerLinks = {
     { name: '機器手臂整合', href: '/products/robotics' },
     { name: '軟體開發', href: '/products/software' },
   ],
-  solutions: [
-    { name: '製造業自動化', href: '/solutions/manufacturing' },
-    { name: '品質檢測系統', href: '/solutions/quality' },
-    { name: '智能倉儲管理', href: '/solutions/warehouse' },
-    { name: '客製化解決方案', href: '/solutions/custom' },
-  ],
   company: [
     { name: '關於我們', href: '/about' },
-    { name: '案例分享', href: '/cases' },
-    { name: '新聞動態', href: '/news' },
     { name: '聯絡我們', href: '/contact' },
   ],
   support: [
@@ -35,7 +27,7 @@ export default function Footer() {
     <footer className="bg-dark-800 border-t border-dark-700">
       <div className="container-custom">
         {/* Main Footer Content */}
-        <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+        <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-6">
@@ -71,23 +63,6 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4">產品服務</h3>
             <ul className="space-y-2">
               {footerLinks.products.map((link) => (
-                <li key={link.name}>
-                  <Link 
-                    href={link.href}
-                    className="text-gray-300 hover:text-primary-400 transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Solutions */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">解決方案</h3>
-            <ul className="space-y-2">
-              {footerLinks.solutions.map((link) => (
                 <li key={link.name}>
                   <Link 
                     href={link.href}

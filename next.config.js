@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost', 'vercel.app'],
+    domains: ['localhost', 'vercel.app', 'images.unsplash.com'],
     unoptimized: true
   },
   // App Router is enabled by default in Next.js 14

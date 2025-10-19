@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import Services from '@/components/Services'
@@ -50,21 +50,30 @@ export default function Home() {
   const [content, setContent] = useState<ContentItem[]>([])
   const [services, setServices] = useState<Service[]>([])
   const [solutions, setSolutions] = useState<Solution[]>([])
-  const [isMounted, setIsMounted] = useState(false)
+  const isMountedRef = useRef(true)
 
   useEffect(() => {
-    setIsMounted(true)
-    fetchContent()
-    fetchServices()
-    fetchSolutions()
+    isMountedRef.current = true
+    
+    const fetchData = async () => {
+      await Promise.all([
+        fetchContent(),
+        fetchServices(),
+        fetchSolutions()
+      ])
+    }
+    
+    fetchData()
     
     // 定期刷新數據（每30秒）
     const interval = setInterval(() => {
-      fetchSolutions()
+      if (isMountedRef.current) {
+        fetchSolutions()
+      }
     }, 30000)
     
     return () => {
-      setIsMounted(false)
+      isMountedRef.current = false
       clearInterval(interval)
     }
   }, [])
@@ -84,12 +93,12 @@ export default function Home() {
       const result = await response.json()
       console.log('Content API result:', result)
       
-      if (result.success) {
+      if (result.success && isMountedRef.current) {
         setContent(result.data || [])
       }
     } catch (error) {
       console.error('Failed to fetch content:', error)
-      if (isMounted) {
+      if (isMountedRef.current) {
         setContent([])
       }
     }
@@ -110,12 +119,12 @@ export default function Home() {
       const result = await response.json()
       console.log('Services API result:', result)
       
-      if (result.success) {
+      if (result.success && isMountedRef.current) {
         setServices(result.data || [])
       }
     } catch (error) {
       console.error('Failed to fetch services:', error)
-      if (isMounted) {
+      if (isMountedRef.current) {
         setServices([])
       }
     }
@@ -136,20 +145,20 @@ export default function Home() {
       const result = await response.json()
       console.log('Solutions API result:', result)
       console.log('Solutions data with images:', result.data?.map((s: any) => ({ id: s.id, title: s.title, imageUrl: s.imageUrl })))
-      console.log('isMounted:', isMounted)
+      console.log('isMounted:', isMountedRef.current)
       console.log('result.success:', result.success)
       console.log('result.data length:', result.data?.length)
       
-      if (result.success) {
+      if (result.success && isMountedRef.current) {
         console.log('Setting solutions state:', result.data)
         setSolutions(result.data || [])
         console.log('Solutions state set successfully')
       } else {
-        console.log('Not setting solutions state - success:', result.success)
+        console.log('Not setting solutions state - success:', result.success, 'isMounted:', isMountedRef.current)
       }
     } catch (error) {
       console.error('Failed to fetch solutions:', error)
-      if (isMounted) {
+      if (isMountedRef.current) {
         setSolutions([])
       }
     }
