@@ -374,6 +374,18 @@ export const getProducts = (): Product[] => {
   return productsData
 }
 
+export const addProduct = (product: Omit<Product, 'id' | 'createdAt' | 'updatedAt' | 'views'>): Product => {
+  const newProduct: Product = {
+    ...product,
+    id: Date.now().toString(),
+    views: 0,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  }
+  productsData.push(newProduct)
+  return newProduct
+}
+
 export const updateProduct = (id: string, updates: Partial<Product>): Product | null => {
   const index = productsData.findIndex(product => product.id === id)
   if (index === -1) return null
@@ -384,6 +396,13 @@ export const updateProduct = (id: string, updates: Partial<Product>): Product | 
     updatedAt: new Date().toISOString()
   }
   return productsData[index]
+}
+
+export const deleteProduct = (id: string): boolean => {
+  const index = productsData.findIndex(product => product.id === id)
+  if (index === -1) return false
+  productsData.splice(index, 1)
+  return true
 }
 
 export const getImages = (): Image[] => {
