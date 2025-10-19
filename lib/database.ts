@@ -14,6 +14,55 @@ export interface ContentItem {
   updatedAt: string
 }
 
+export interface HomepageSection {
+  id: string
+  type: 'hero' | 'cta-buttons' | 'stats' | 'services' | 'solutions'
+  title: string
+  content: {
+    title?: {
+      text: string
+      fontSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl'
+      fontWeight?: 'normal' | 'medium' | 'semibold' | 'bold'
+      fontFamily?: 'sans' | 'serif' | 'mono'
+    }
+    subtitle?: {
+      text: string
+      fontSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl'
+      fontWeight?: 'normal' | 'medium' | 'semibold' | 'bold'
+      fontFamily?: 'sans' | 'serif' | 'mono'
+    }
+    description?: {
+      text: string
+      fontSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl'
+      fontWeight?: 'normal' | 'medium' | 'semibold' | 'bold'
+      fontFamily?: 'sans' | 'serif' | 'mono'
+    }
+    cards?: Array<{
+      id: string
+      title: string
+      description?: string
+      buttonText?: string
+      buttonLink?: string
+      icon?: string
+      position: 'left' | 'right'
+      fontSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl'
+      fontWeight?: 'normal' | 'medium' | 'semibold' | 'bold'
+      fontFamily?: 'sans' | 'serif' | 'mono'
+    }>
+    stats?: Array<{
+      id: string
+      number: string
+      label: string
+      fontSize?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl'
+      fontWeight?: 'normal' | 'medium' | 'semibold' | 'bold'
+      fontFamily?: 'sans' | 'serif' | 'mono'
+    }>
+  }
+  order: number
+  isActive: boolean
+  updatedAt: string
+}
+
 export interface Product {
   id: string
   name: string
@@ -410,6 +459,124 @@ let servicesData: Service[] = [
 // 從持久化存儲加載解決方案數據
 let solutionsData: Solution[] = loadSolutions()
 
+// 首頁區塊數據
+let homepageSections: HomepageSection[] = [
+  {
+    id: 'hero-section',
+    type: 'hero',
+    title: '首頁主標題區塊',
+    content: {
+      title: {
+        text: '釋放自動化',
+        fontSize: '7xl',
+        fontWeight: 'bold',
+        fontFamily: 'sans'
+      },
+      subtitle: {
+        text: '的無限潛能',
+        fontSize: '7xl',
+        fontWeight: 'bold',
+        fontFamily: 'sans'
+      },
+      description: {
+        text: '專業的 AOI、AI、機器手臂、軟體整合服務\n為您的企業提供完整的自動化解決方案',
+        fontSize: 'xl',
+        fontWeight: 'normal',
+        fontFamily: 'sans'
+      }
+    },
+    order: 1,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'cta-buttons-section',
+    type: 'cta-buttons',
+    title: '行動呼籲按鈕區塊',
+    content: {
+      cards: [
+        {
+          id: 'cta-1',
+          title: '專業服務',
+          description: '探索我們的專業服務',
+          buttonText: '專業服務',
+          buttonLink: '/products',
+          icon: 'arrow-right',
+          position: 'left',
+          fontSize: 'lg',
+          fontWeight: 'medium',
+          fontFamily: 'sans'
+        },
+        {
+          id: 'cta-2',
+          title: '技術優勢',
+          description: '了解我們的技術實力',
+          buttonText: '技術優勢',
+          buttonLink: '/about',
+          icon: 'play',
+          position: 'right',
+          fontSize: 'lg',
+          fontWeight: 'medium',
+          fontFamily: 'sans'
+        }
+      ]
+    },
+    order: 2,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'stats-section',
+    type: 'stats',
+    title: '統計數據區塊',
+    content: {
+      title: {
+        text: '信賴我們的客戶',
+        fontSize: 'lg',
+        fontWeight: 'medium',
+        fontFamily: 'sans'
+      },
+      stats: [
+        {
+          id: 'stat-1',
+          number: '100+',
+          label: '成功案例',
+          fontSize: '2xl',
+          fontWeight: 'bold',
+          fontFamily: 'sans'
+        },
+        {
+          id: 'stat-2',
+          number: '50+',
+          label: '合作夥伴',
+          fontSize: '2xl',
+          fontWeight: 'bold',
+          fontFamily: 'sans'
+        },
+        {
+          id: 'stat-3',
+          number: '99.9%',
+          label: '系統穩定性',
+          fontSize: '2xl',
+          fontWeight: 'bold',
+          fontFamily: 'sans'
+        },
+        {
+          id: 'stat-4',
+          number: '24/7',
+          label: '技術支援',
+          fontSize: '2xl',
+          fontWeight: 'bold',
+          fontFamily: 'sans'
+        }
+      ]
+    },
+    order: 3,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  }
+]
+
 // API 函數
 export const getContent = (type?: string, section?: string): ContentItem[] => {
   let filtered = contentData
@@ -637,5 +804,44 @@ export const deleteSolution = (id: string): boolean => {
   // 保存到文件系統
   saveSolutions(solutionsData)
   
+  return true
+}
+
+// 首頁區塊 API 函數
+export const getHomepageSections = (): HomepageSection[] => {
+  return homepageSections.filter(section => section.isActive).sort((a, b) => a.order - b.order)
+}
+
+export const getHomepageSection = (id: string): HomepageSection | null => {
+  return homepageSections.find(section => section.id === id) || null
+}
+
+export const updateHomepageSection = (id: string, updates: Partial<HomepageSection>): HomepageSection | null => {
+  const index = homepageSections.findIndex(section => section.id === id)
+  if (index === -1) return null
+  
+  homepageSections[index] = {
+    ...homepageSections[index],
+    ...updates,
+    updatedAt: new Date().toISOString()
+  }
+  
+  return homepageSections[index]
+}
+
+export const addHomepageSection = (section: Omit<HomepageSection, 'id' | 'updatedAt'>): HomepageSection => {
+  const newSection: HomepageSection = {
+    ...section,
+    id: `section-${Date.now()}`,
+    updatedAt: new Date().toISOString()
+  }
+  homepageSections.push(newSection)
+  return newSection
+}
+
+export const deleteHomepageSection = (id: string): boolean => {
+  const index = homepageSections.findIndex(section => section.id === id)
+  if (index === -1) return false
+  homepageSections.splice(index, 1)
   return true
 }
