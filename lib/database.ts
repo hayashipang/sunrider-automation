@@ -138,6 +138,66 @@ let contentData: ContentItem[] = [
     isActive: true,
     updatedAt: new Date().toISOString()
   },
+  // 服務區塊內容
+  {
+    id: 'services-1',
+    type: 'service',
+    section: 'services-title',
+    title: '我們的服務',
+    content: '提供全方位的自動化解決方案',
+    order: 1,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'services-2',
+    type: 'service',
+    section: 'services-description',
+    content: '從 AOI 視覺檢測到 AI 智能分析，從機器手臂整合到軟體開發，我們為您提供完整的自動化服務',
+    order: 2,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  // 解決方案區塊內容
+  {
+    id: 'solutions-1',
+    type: 'solution',
+    section: 'solutions-title',
+    title: '解決方案',
+    content: '針對不同產業需求提供客製化解決方案',
+    order: 1,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'solutions-2',
+    type: 'solution',
+    section: 'solutions-description',
+    content: '無論是製造業、電子業還是傳統產業，我們都能為您量身打造最適合的自動化解決方案',
+    order: 2,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  // 統計數據區塊內容
+  {
+    id: 'stats-1',
+    type: 'hero',
+    section: 'stats-title',
+    title: '我們的成就',
+    content: '用數據說話，展現我們的專業實力',
+    order: 1,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'stats-2',
+    type: 'hero',
+    section: 'stats-description',
+    content: '多年來我們服務了眾多客戶，在自動化領域累積了豐富的經驗與成功案例',
+    order: 2,
+    isActive: true,
+    updatedAt: new Date().toISOString()
+  },
   // 關於我們內容
   {
     id: 'about-1',

@@ -83,14 +83,27 @@ export default function HomeManagement() {
 
   const fetchContent = async () => {
     try {
-      const response = await fetch('/api/content?type=hero')
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      const result = await response.json()
-      if (result.success) {
-        setContent(result.data || [])
-      }
+      // 獲取所有首頁相關的內容類型
+      const [heroResponse, serviceResponse, solutionResponse] = await Promise.all([
+        fetch('/api/content?type=hero'),
+        fetch('/api/content?type=service'),
+        fetch('/api/content?type=solution')
+      ])
+      
+      const [heroResult, serviceResult, solutionResult] = await Promise.all([
+        heroResponse.json(),
+        serviceResponse.json(),
+        solutionResponse.json()
+      ])
+      
+      // 合併所有內容
+      const allContent = [
+        ...(heroResult.success ? heroResult.data || [] : []),
+        ...(serviceResult.success ? serviceResult.data || [] : []),
+        ...(solutionResult.success ? solutionResult.data || [] : [])
+      ]
+      
+      setContent(allContent)
     } catch (error) {
       console.error('Failed to fetch content:', error)
       setContent([])
